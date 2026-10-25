@@ -25,8 +25,11 @@
     fixErrors: L("Answer the highlighted questions to continue.", "آگے بڑھنے کے لیے نشان زدہ سوالوں کے جواب دیں۔"),
     branchPlaceholder: L("Choose your branch", "اپنی برانچ منتخب کریں"),
     otherItem: L("What else did you order?", "اور کیا آرڈر کیا؟"),
-    name: L("Name", "نام"),
-    phone: L("Mobile number", "موبائل نمبر"),
+    name: L("Your name", "آپ کا نام"),
+    phoneOptional: L("Mobile number (optional)", "موبائل نمبر (اختیاری)"),
+    phone: L("Mobile number for offers", "آفرز کے لیے موبائل نمبر"),
+    nameMissing: L("Please enter your name.", "براہ کرم اپنا نام لکھیں۔"),
+    phoneInvalid: L("Enter a mobile number like 0300 1234567, or leave it empty.", "موبائل نمبر اس طرح لکھیں: 0300 1234567، یا خالی چھوڑ دیں۔"),
     phoneMissing: L("Enter your mobile number to get offers, like 0300 1234567.", "آفرز کے لیے اپنا موبائل نمبر لکھیں، جیسے 0300 1234567"),
     commentsPh: L("A compliment, a complaint, or anything we missed", "تعریف، شکایت، یا کوئی بھی بات جو ہم نے نہیں پوچھی"),
     ratings: [L("Very bad", "بہت برا"), L("Bad", "برا"), L("Okay", "ٹھیک ہے"), L("Good", "اچھا"), L("Excellent", "بہترین")],
@@ -41,7 +44,7 @@
     contactLead: L("Questions about your order? Contact us.", "آرڈر کے بارے میں کوئی سوال؟ ہم سے رابطہ کریں۔")
   };
 
-  const SIX = L("Six quick questions.", "صرف چھ آسان سوال۔");
+  const SIX = L("Six quick questions and your name.", "چھ آسان سوال اور آپ کا نام۔");
   const STEPS = [
     { label: L("Visit", "برانچ"), title: L("Your order", "آپ کا آرڈر"), sub: L("Pick your branch, then tap how you got your order.", "اپنی برانچ منتخب کریں، پھر بتائیں آرڈر کیسے لیا۔") },
     { service: true },
@@ -101,6 +104,7 @@
   }
   const titleOf = q => (q.titleByService ? q.titleByService[answers.service] : q.title) || L("", "");
   const isAnswered = q => {
+    if (q.kind === "contact") return Boolean((text.name || "").trim());
     if (q.kind === "text") return Boolean((text[q.key] || "").trim());
     const v = answers[q.key];
     return Array.isArray(v) ? v.length > 0 : Boolean(v);
@@ -140,6 +144,11 @@
     if (q.kind === "text") {
       return `<textarea id="comments" data-text="comments" rows="3" maxlength="1000" aria-labelledby="${k}-title" placeholder="${tr(UI.commentsPh)}"></textarea>`;
     }
+    if (q.kind === "contact") {
+      return `<div class="extra">` +
+        `<div class="field"><label for="name">${tr(UI.name)}</label><input id="name" data-text="name" type="text" autocomplete="name" maxlength="80"></div>` +
+        `<div class="field"><label for="phone">${tr(UI.phoneOptional)}</label><input id="phone" data-text="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" dir="ltr" placeholder="03XX XXXXXXX"></div></div>`;
+    }
     const multi = q.kind === "multi";
     let html = `<div class="pills" role="${multi ? "group" : "radiogroup"}" aria-labelledby="${k}-title">` +
       optionsOf(q).map(op =>
@@ -152,9 +161,9 @@
         `<input id="other_item" data-text="other_item" type="text" maxlength="80"></div></div>`;
     }
     if (k === "offers") {
-      html += `<div class="extra" id="offers-extra" hidden>` +
-        `<div class="field"><label for="name">${tr(UI.name)}</label><input id="name" data-text="name" type="text" autocomplete="name" maxlength="80"></div>` +
-        `<div class="field"><label for="phone">${tr(UI.phone)}</label><input id="phone" data-text="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" dir="ltr" placeholder="03XX XXXXXXX"></div></div>`;
+      // The same number as in "Your name and number", shown again here so it can be added or fixed.
+      html += `<div class="extra single" id="offers-extra" hidden>` +
+        `<div class="field"><label for="offers-phone">${tr(UI.phone)}</label><input id="offers-phone" data-text="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" dir="ltr" placeholder="03XX XXXXXXX"></div></div>`;
     }
     return html;
   }
@@ -258,7 +267,12 @@
     QUESTIONS.forEach(q => {
       if (q.step !== current || q.kind === "group" || !isVisible(q)) return;
       let msg = "";
-      if (q.required && !isAnswered(q)) msg = tr(UI.required);
+      if (q.kind === "contact") {
+        if (!isAnswered(q)) msg = tr(UI.nameMissing);
+        else if ((text.phone || "").trim() && !validPhone(text.phone)) msg = tr(UI.phoneInvalid);
+      } else if (q.required && !isAnswered(q)) {
+        msg = tr(UI.required);
+      }
       if (q.key === "offers" && answers.offers === "yes" && !validPhone(text.phone)) msg = tr(UI.phoneMissing);
       showError(q, msg);
       if (msg) failed.push(q);
@@ -272,7 +286,9 @@
     const first = failed[0];
     const sec = $("q-" + first.key);
     sec.scrollIntoView({ behavior: smooth(), block: "center" });
-    const target = first.key === "offers" && answers.offers === "yes" ? $("phone") : sec.querySelector("input, select");
+    let target = sec.querySelector("input, select");
+    if (first.key === "offers") target = $("offers-phone");
+    if (first.kind === "contact" && isAnswered(first)) target = $("phone");
     if (target) target.focus({ preventScroll: true });
     return false;
   }
@@ -335,7 +351,12 @@
     const el = e.target;
     if (!el.dataset.text) return;
     text[el.dataset.text] = el.value;
-    if (el.dataset.text === "phone" && validPhone(el.value)) showError(byKey.offers, "");
+    if (el.dataset.text === "phone") {
+      list.querySelectorAll('[data-text="phone"]').forEach(i => { if (i !== el) i.value = el.value; });
+      if (validPhone(el.value)) showError(byKey.offers, "");
+    }
+    const contact = byKey.contact;
+    if (isAnswered(contact) && (!(text.phone || "").trim() || validPhone(text.phone))) showError(contact, "");
   });
 
   document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
@@ -356,17 +377,16 @@
   function buildPayload() {
     const given = {};
     QUESTIONS.forEach(q => {
-      if (["group", "text"].includes(q.kind) || !isVisible(q) || !isAnswered(q)) return;
+      if (["group", "text", "contact"].includes(q.kind) || !isVisible(q) || !isAnswered(q)) return;
       given[q.key] = answers[q.key];
     });
-    const offers = answers.offers === "yes";
     return {
       language: lang,
       answers: given,
       comments: (text.comments || "").trim(),
       other_item: (answers.items || []).includes("other") ? (text.other_item || "").trim() : "",
-      name: offers ? (text.name || "").trim() : "",
-      phone: offers ? (text.phone || "").trim() : "",
+      name: (text.name || "").trim(),
+      phone: (text.phone || "").trim(),
       website: $("website").value
     };
   }

@@ -35,7 +35,7 @@ def build_workbook(rows: list[dict], stats: dict, filters_label: str) -> bytes:
     headers = ["Reference", f"Submitted ({settings.timezone})", "Status", "Branch", "Order type",
                "Food (1-5)", "Would come back", "Needs attention", "Issues"]
     headers += [catalogue.title(q) + (" (1-5)" if q["kind"] == "stars" else "") for q in questions]
-    headers += ["Other item ordered", "Comments", "Wants offers", "Name", "Phone", "Language", "Admin note"]
+    headers += ["Other item ordered", "Comments", "Wants offers", "Name", "Mobile", "Language", "Admin note"]
     ws.append(headers)
     first_free_text = len(headers) - 6  # "Other item ordered" onward is typed by people
 

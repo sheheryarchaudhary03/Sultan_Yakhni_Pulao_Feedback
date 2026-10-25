@@ -24,14 +24,18 @@ def _new_reference() -> str:
 
 def create_response(payload: FeedbackIn, ip_hash: str | None, user_agent: str | None) -> str:
     answers = catalogue.clean(payload.answers)
+    if not payload.name:
+        raise SubmissionError("Please enter your name.")
+    if payload.phone and not catalogue.valid_phone(payload.phone):
+        raise SubmissionError("Enter a mobile number like 0300 1234567, or leave it empty.")
     wants_offers = answers.get("offers") == "yes"
-    if wants_offers and not catalogue.valid_phone(payload.phone):
+    if wants_offers and not payload.phone:
         raise SubmissionError("Enter your mobile number to get offers, like 0300 1234567.")
     found = catalogue.issues(answers)
     row = (
         payload.answers["branch"], payload.answers["service"], payload.language, answers["food"],
         catalogue.would_return(answers), bool(found), Jsonb(found), Jsonb(answers), wants_offers,
-        payload.name if wants_offers else None, payload.phone if wants_offers else None,
+        payload.name, payload.phone,
         payload.other_item if "other" in (answers.get("items") or []) else None,
         payload.comments, ip_hash, (user_agent or "")[:500] or None,
     )

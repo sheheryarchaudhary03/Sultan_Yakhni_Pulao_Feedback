@@ -134,6 +134,10 @@
     { "key": "takeaway_again", "step": 1, "kind": "choice", "required": true, "when": { "service": ["takeaway"] }, "options": "@again",
       "title": { "en": "Would you choose takeaway from Sultan again?", "ur": "کیا آپ دوبارہ سلطان سے ٹیک اوے لیں گے؟" } },
 
+    { "key": "contact", "step": 1, "kind": "contact", "required": true,
+      "title": { "en": "Your name and number", "ur": "آپ کا نام اور نمبر" },
+      "hint": { "en": "So we can call you back if anything went wrong.", "ur": "تاکہ کسی مسئلے کی صورت میں ہم آپ سے رابطہ کر سکیں۔" } },
+
     { "key": "g_food", "step": 2, "kind": "group",
       "title": { "en": "More about the food", "ur": "کھانے کے بارے میں مزید" } },
     { "key": "items", "step": 2, "kind": "multi", "options": "@menu",

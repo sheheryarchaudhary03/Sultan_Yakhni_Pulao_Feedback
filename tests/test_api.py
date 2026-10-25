@@ -16,7 +16,7 @@ DELIVERY_BAD = {
 
 
 def submit(client, answers, **extra):
-    return client.post("/api/feedback", json={"language": "en", "answers": answers, **extra})
+    return client.post("/api/feedback", json={"language": "en", "answers": answers, "name": "Test customer", **extra})
 
 
 def test_form_page_carries_catalogue(client):
@@ -57,6 +57,17 @@ def test_answers_for_hidden_questions_are_dropped(client, admin):
     keys = {row["key"] for s in detail["sections"] for row in s["rows"]}
     assert "rider_behaviour" not in keys
     assert item["needs_attention"] is False
+
+
+def test_name_required_and_phone_checked(client, admin):
+    r = submit(client, DINE_IN, name="")
+    assert r.status_code == 422 and "name" in r.json()["detail"]
+    assert submit(client, DINE_IN, phone="12345").status_code == 422
+    r = submit(client, DINE_IN, name="Ayesha", phone="0321-7654321")
+    assert r.status_code == 201
+    item = admin.get("/api/admin/responses", params={"q": r.json()["reference"]}).json()["items"][0]
+    assert item["customer_name"] == "Ayesha" and item["customer_phone"] == "0321-7654321"
+    assert item["wants_offers"] is False
 
 
 def test_offers_need_a_phone(client):

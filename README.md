@@ -13,9 +13,10 @@ up on complaints, and export everything to Excel.
 
 1. **Visit:** branch and order type (dine-in, takeaway or delivery). Tapping the order
    type moves straight to the next page.
-2. **Review:** six required questions for that order type.
+2. **Review:** six required questions for that order type, then the customer's name
+   (required) and mobile number (optional, checked if given).
 3. **Optional:** more about the food, the visit or delivery, and the customer. **Send now**
-   on step 2 skips this page. Customers who want offers leave a mobile number.
+   on step 2 skips this page. Customers who want offers must give a mobile number.
 
 After sending, the customer sees a reference code (like `SYP-261025-HQG5V`) they can
 quote if they call.
