@@ -1,0 +1,1025 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sultan Yakhni Pulao Feedback</title>
+<link rel="icon" type="image/webp" href="logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&family=Rozha+One&display=swap">
+<style>
+/* Layout: one narrow column. An arched, Mughal-doorway header crowns a three-step form
+   (branch, six required questions, optional extras); Back / Send / Next stick to the bottom. */
+:root {
+  --bg: #F1F4EF;
+  --surface: #FFFFFF;
+  --sunken: #F5F8F4;
+  --ink: #17221D;
+  --muted: #56665D;
+  --line: #D8E1D9;
+  --brand: #1C5841;
+  --brand-hover: #174A37;
+  --brand-text: #1C5841;
+  --brand-soft: #E4EEE8;
+  --on-brand: #FFFFFF;
+  --on-brand-soft: rgba(255, 255, 255, .8);
+  --on-brand-line: rgba(255, 255, 255, .16);
+  --gold: #F2C24F;
+  --gold-line: rgba(242, 194, 79, .45);
+  --medallion: #FFFFFF;    /* the logo sits on white in both themes */
+  --star: #E0A21B;
+  --star-empty: #CBD5CD;
+  --danger: #B3261E;
+  --danger-soft: #FCEBE9;
+  --shadow: 0 1px 2px rgba(23, 34, 29, .06), 0 10px 28px rgba(23, 34, 29, .08);
+
+  --font-display: "Rozha One", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1612;
+    --surface: #15211B;
+    --sunken: #111B16;
+    --ink: #E6ECE7;
+    --muted: #9BADA2;
+    --line: #2A3B32;
+    --brand: #1F6249;
+    --brand-hover: #247055;
+    --brand-text: #84CFA8;
+    --brand-soft: #1A3127;
+    --star: #F2B53A;
+    --star-empty: #3A4D43;
+    --danger: #F28B82;
+    --danger-soft: #3A1F1C;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1612;
+  --surface: #15211B;
+  --sunken: #111B16;
+  --ink: #E6ECE7;
+  --muted: #9BADA2;
+  --line: #2A3B32;
+  --brand: #1F6249;
+  --brand-hover: #247055;
+  --brand-text: #84CFA8;
+  --brand-soft: #1A3127;
+  --star: #F2B53A;
+  --star-empty: #3A4D43;
+  --danger: #F28B82;
+  --danger-soft: #3A1F1C;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font-body);
+  padding-inline: 16px;
+  padding-block: max(1rem, env(safe-area-inset-top, 0px)) 0;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+.shell { max-width: 34rem; margin-inline: auto; padding-bottom: 1.5rem; }
+
+/* Language switch */
+.topbar { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.lang { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.lang button {
+  border: 0; background: none; border-radius: 999px; cursor: pointer;
+  padding: 0 .95rem; min-height: 2.1rem; font-size: .875rem; font-weight: 600; color: var(--muted);
+}
+.lang button[lang="ur"] { font-family: var(--font-urdu); font-weight: 400; font-size: .95rem; }
+.lang button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.lang button:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Arched header */
+.arch {
+  position: relative;
+  text-align: center;
+  color: var(--on-brand);
+  background-color: var(--brand);
+  background-image: radial-gradient(var(--on-brand-line) 1px, transparent 1.6px);
+  background-size: 14px 14px;
+  border-radius: 50% 50% 0 0 / 7rem 7rem 0 0;
+  padding: 2.6rem 1.5rem 1.6rem;
+}
+.arch::before {
+  content: "";
+  position: absolute;
+  inset: .55rem .55rem 0;
+  border: 1px solid var(--gold-line);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 6.5rem 6.5rem 0 0;
+  pointer-events: none;
+}
+.medallion {
+  position: relative; display: grid; place-items: center;
+  width: 6.5rem; height: 6.5rem; margin: 0 auto;
+  border-radius: 50%; background: var(--medallion);
+  box-shadow: 0 0 0 3px var(--brand), 0 0 0 4.5px var(--gold), 0 8px 20px rgba(0, 0, 0, .28);
+}
+.medallion img { display: block; width: 86%; height: auto; }
+.eyebrow {
+  margin: 1rem 0 .2rem; color: var(--on-brand-soft);
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+}
+.brand { margin: 0; font: 400 clamp(2rem, 8vw, 2.75rem)/1.05 var(--font-display); color: var(--gold); text-wrap: balance; }
+.slogan { max-width: 22rem; margin: .4rem auto 0; font: 400 1.1rem/2.2 var(--font-urdu); color: var(--on-brand-soft); text-wrap: balance; }
+.intro { margin-top: 1rem; padding-top: 1.1rem; border-top: 1px solid var(--on-brand-line); }
+.intro-title { margin: 0; font-size: 1.3rem; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+.intro-lede { margin: .25rem 0 0; color: var(--on-brand-soft); font-size: .95rem; }
+
+/* Panel, step progress and step heading */
+.panel { background: var(--surface); border-radius: 0 0 1.25rem 1.25rem; box-shadow: var(--shadow); scroll-margin-top: 1rem; }
+.steps {
+  list-style: none; margin: 0; padding: 1.1rem 1.5rem 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem;
+}
+.steps li { display: grid; gap: .35rem; min-width: 0; }
+.seg { height: .3rem; border-radius: 99px; background: var(--line); transition: background-color .25s; }
+.steps li.done .seg { background: var(--brand-text); }
+.steps li.current .seg { background: var(--star); }
+.step-label { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: .75rem; font-weight: 600; color: var(--muted); }
+.steps li.current .step-label { color: var(--ink); }
+.step-head { padding: 1.1rem 1.5rem 1.2rem; }
+.step-kicker { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-text); }
+.step-title { margin: .15rem 0 0; font: 400 1.75rem/1.15 var(--font-display); color: var(--ink); }
+.step-title:focus { outline: none; }
+.step-sub { margin: .25rem 0 0; font-size: .95rem; color: var(--muted); }
+
+/* Section bands inside the optional step */
+.group-head { padding: .7rem 1.5rem; border-top: 1px solid var(--line); background: var(--sunken); }
+.group-head h3 { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-text); }
+
+/* Questions */
+.q { padding: 1.3rem 1.5rem; border-top: 1px solid var(--line); }
+.q-head { display: flex; gap: .7rem; align-items: flex-start; }
+.q-num {
+  flex: none; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; margin-top: .05rem;
+  border-radius: 50%; background: var(--brand-soft); color: var(--brand-text);
+  font: 700 .8rem/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
+.q-title { margin: 0; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; text-wrap: balance; }
+.q-hint { margin: .15rem 0 0; font-size: .9rem; color: var(--muted); }
+.q-body { margin-top: .9rem; }
+.q-error { margin: .75rem 0 0; color: var(--danger); font-size: .9rem; font-weight: 600; }
+.q.invalid .q-num { background: var(--danger); color: var(--surface); }
+
+.star input, .choice input, .pill input {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer;
+}
+
+/* Branch dropdown */
+.select { position: relative; }
+.select select {
+  appearance: none; -webkit-appearance: none; display: block; width: 100%; min-height: 3rem; cursor: pointer;
+  padding-block: .6rem; padding-inline: .9rem 2.75rem;
+  border: 1.5px solid var(--line); border-radius: .8rem; background: var(--surface); color: var(--ink);
+  font-size: 1rem; font-weight: 600;
+}
+.select::after {
+  content: ""; position: absolute; inset-inline-end: 1.1rem; top: 50%; width: .55rem; height: .55rem;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: translateY(-70%) rotate(45deg); pointer-events: none;
+}
+.select select:focus { outline: none; border-color: var(--brand-text); box-shadow: 0 0 0 3px var(--brand-soft); }
+
+/* Star rating */
+.stars { display: flex; gap: .4rem; }
+.star { position: relative; display: block; }
+.star svg {
+  display: block; width: clamp(2.25rem, 11vw, 2.75rem); height: clamp(2.25rem, 11vw, 2.75rem);
+  fill: var(--star-empty); transition: fill .15s, transform .15s;
+}
+.star.on svg { fill: var(--star); }
+.star:active svg { transform: scale(.9); }
+.star input:focus-visible + svg { outline: 2px solid var(--brand-text); outline-offset: 2px; border-radius: .4rem; }
+.star-caption { min-height: 1.5em; margin: .35rem 0 0; font-weight: 600; color: var(--muted); }
+
+/* Service type cards */
+.choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.choice { position: relative; display: flex; }
+.choice span {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem;
+  min-height: 3rem; padding: .7rem .5rem; text-align: center;
+  border: 1.5px solid var(--line); border-radius: .85rem; background: var(--surface);
+  font-size: .95rem; font-weight: 600; line-height: 1.25;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.choice svg {
+  width: 1.6rem; height: 1.6rem; fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; color: var(--brand-text);
+}
+.choice input:checked + span { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.choice input:checked + span svg { color: var(--gold); }
+
+/* One-tap answers */
+.pills { display: flex; flex-wrap: wrap; gap: .45rem; }
+.pill { position: relative; display: flex; }
+.pill span {
+  display: flex; align-items: center; gap: .35rem; min-height: 2.6rem; padding: .4rem .95rem;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface);
+  font-size: .95rem; font-weight: 500; line-height: 1.3;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.pill input:checked + span { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.pill input[type="checkbox"]:checked + span::before { content: "\2713"; font-weight: 700; }
+
+.choice input:focus-visible + span, .pill input:focus-visible + span { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+@media (hover: hover) {
+  .choice:hover input:not(:checked) + span, .pill:hover input:not(:checked) + span { border-color: var(--brand-text); }
+}
+
+/* Text fields */
+textarea, .field input {
+  display: block; width: 100%; padding: .7rem .85rem;
+  border: 1.5px solid var(--line); border-radius: .8rem; background: var(--surface); color: var(--ink);
+  font-size: 1rem;
+}
+textarea { min-height: 6rem; resize: vertical; line-height: 1.5; }
+textarea::placeholder, input::placeholder { color: var(--muted); opacity: .85; }
+textarea:focus, .field input:focus { outline: none; border-color: var(--brand-text); box-shadow: 0 0 0 3px var(--brand-soft); }
+.extra { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .9rem; }
+.extra.single { grid-template-columns: 1fr; }
+.field { display: grid; gap: .3rem; min-width: 0; }
+.field label { font-size: .875rem; font-weight: 600; color: var(--muted); }
+
+/* Back / Send now / Next bar */
+.bar {
+  position: sticky; bottom: 0; z-index: 5;
+  padding-block: 1.25rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg) 72%, transparent);
+}
+.bar-msg {
+  margin: 0 0 .6rem; padding: .6rem .85rem; border-radius: .7rem;
+  background: var(--danger-soft); color: var(--danger); font-size: .9rem; font-weight: 600;
+}
+.bar-inner { display: flex; align-items: center; gap: .6rem; }
+.bar-spacer { flex: 1; }
+.submit {
+  flex: none; min-height: 3rem; padding-inline: 1.6rem; cursor: pointer;
+  border: 0; border-radius: 999px; background: var(--brand); color: var(--on-brand);
+  font-weight: 700; box-shadow: var(--shadow);
+}
+.submit:hover { background: var(--brand-hover); }
+.submit:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 3px; }
+.submit:disabled, .ghost:disabled { opacity: .7; cursor: progress; }
+.ghost {
+  flex: none; min-height: 3rem; padding: 0 1.2rem; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-weight: 600;
+}
+.ghost:hover { border-color: var(--brand-text); }
+.ghost:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Thank-you */
+.thanks { padding: 2.5rem 1.5rem 2rem; text-align: center; }
+.thanks-mark {
+  display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem;
+  border-radius: 50%; background: var(--brand-soft); color: var(--brand-text);
+}
+.thanks-mark svg { width: 1.75rem; height: 1.75rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.thanks-title { margin: 0; font: 400 2.25rem/1.15 var(--font-display); color: var(--brand-text); }
+.thanks-title:focus { outline: none; }
+.thanks p { max-width: 26rem; margin: .6rem auto 1.5rem; color: var(--muted); }
+.thanks .ghost { min-height: 2.75rem; }
+.thanks-links { display: grid; gap: .6rem; max-width: 20rem; margin: 0 auto 1.25rem; }
+.cta {
+  display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 3rem; padding: 0 1.2rem;
+  border: 1.5px solid var(--brand); border-radius: 999px; background: var(--brand); color: var(--on-brand);
+  font-weight: 700; text-decoration: none;
+}
+.cta:hover { background: var(--brand-hover); }
+.cta.alt { border-color: var(--line); background: var(--surface); color: var(--brand-text); }
+.cta.alt:hover { border-color: var(--brand-text); }
+.cta:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Contact strip */
+.contact { margin-top: 2rem; text-align: center; font-size: .9rem; color: var(--muted); }
+.contact p { margin: 0 0 .65rem; }
+.contact ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.contact a {
+  display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: 0 .95rem;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  color: var(--brand-text); font-weight: 600; text-decoration: none;
+}
+.contact a:hover { border-color: var(--brand-text); }
+.contact a:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+.ico { flex: none; width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Urdu: Nastaliq needs taller lines and no letter-spacing */
+#app[lang="ur"] { font-family: var(--font-urdu); line-height: 2.1; }
+#app[lang="ur"] .eyebrow { letter-spacing: 0; text-transform: none; font-size: .85rem; line-height: 2; }
+#app[lang="ur"] .intro-title { font-weight: 600; font-size: 1.3rem; line-height: 2.2; }
+#app[lang="ur"] .intro-lede { line-height: 2; }
+#app[lang="ur"] .step-label { font-weight: 400; line-height: 2; }
+#app[lang="ur"] .step-kicker, #app[lang="ur"] .group-head h3 { letter-spacing: 0; text-transform: none; font-weight: 400; font-size: .85rem; line-height: 2; }
+#app[lang="ur"] .step-title { font-family: var(--font-urdu); font-size: 1.45rem; line-height: 2.3; }
+#app[lang="ur"] .step-sub, #app[lang="ur"] .q-hint { line-height: 2; }
+#app[lang="ur"] .q-title { font-size: 1rem; line-height: 2.2; }
+#app[lang="ur"] .q-head { align-items: center; }
+#app[lang="ur"] .choice span, #app[lang="ur"] .pill span { font-weight: 400; line-height: 2; padding-block: .2rem; }
+#app[lang="ur"] .pill span { font-size: .9rem; }
+#app[lang="ur"] .star-caption { line-height: 2.2; }
+#app[lang="ur"] textarea { line-height: 2.2; }
+#app[lang="ur"] .submit, #app[lang="ur"] .ghost { font-weight: 600; line-height: 2; }
+#app[lang="ur"] .thanks-title { font-family: var(--font-urdu); font-size: 2rem; line-height: 2.4; }
+#app[lang="ur"] .cta { font-weight: 600; line-height: 2; }
+#app[lang="ur"] .contact p { line-height: 2; }
+#app[lang="ur"] .contact a { font-family: var(--font-body); }
+
+@media (max-width: 380px) {
+  .q, .step-head, .group-head { padding-inline: 1.15rem; }
+  .steps { padding-inline: 1.15rem; }
+  .extra { grid-template-columns: 1fr; }
+  .submit { padding-inline: 1.2rem; }
+  .ghost { padding-inline: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="shell" id="app" lang="en" dir="ltr">
+  <div class="topbar">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" id="lang-ur" data-lang="ur" aria-pressed="false" lang="ur">اردو</button>
+    </div>
+  </div>
+
+  <header class="arch">
+    <div class="medallion"><img src="logo.webp" width="150" height="150" alt=""></div>
+    <p class="eyebrow" data-t="eyebrow">Customer feedback</p>
+    <h1 class="brand">Sultan Yakhni Pulao</h1>
+    <p class="slogan" lang="ur" dir="rtl">یہاں ذائقہ مسکرائے، وہاں سلطان یاد آئے</p>
+    <div class="intro" id="intro">
+      <h2 class="intro-title" data-t="title">How was your meal today?</h2>
+      <p class="intro-lede" data-t="lede">Under a minute. The extra questions at the end are optional.</p>
+    </div>
+  </header>
+
+  <form id="form" novalidate>
+    <div class="panel" id="panel">
+      <ol class="steps" id="steps">
+        <li><span class="seg"></span><span class="step-label"></span></li>
+        <li><span class="seg"></span><span class="step-label"></span></li>
+        <li><span class="seg"></span><span class="step-label"></span></li>
+      </ol>
+      <div class="step-head">
+        <p class="step-kicker" id="step-kicker"></p>
+        <h2 class="step-title" id="step-title" tabindex="-1"></h2>
+        <p class="step-sub" id="step-sub"></p>
+      </div>
+      <div id="questions"></div>
+    </div>
+
+    <div class="bar">
+      <p class="bar-msg" id="form-msg" role="alert" hidden></p>
+      <div class="bar-inner">
+        <button class="ghost" type="button" id="back" data-t="back" hidden>Back</button>
+        <span class="bar-spacer"></span>
+        <button class="ghost" type="button" id="send-now" data-t="sendNow" hidden>Send now</button>
+        <button class="submit" type="submit" id="submit">Next</button>
+      </div>
+    </div>
+  </form>
+
+  <section class="panel thanks" id="thanks" hidden>
+    <div class="thanks-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="5 12.5 10 17.5 19 7"/></svg></div>
+    <h2 class="thanks-title" id="thanks-title" tabindex="-1" data-t="thanksTitle">Shukriya!</h2>
+    <p data-t="thanksBody">Thank you for your feedback. We hope to serve you again soon.</p>
+    <div class="thanks-links">
+      <a class="cta" href="https://www.instagram.com/sultanyakhnipulao/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span data-t="follow">Follow us on Instagram</span>
+      </a>
+      <a class="cta alt" href="https://sultanpulao.com" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <span data-t="orderAgain">Order again online</span>
+      </a>
+    </div>
+    <button type="button" class="ghost" id="again" data-t="again">Give feedback on another order</button>
+  </section>
+
+  <footer class="contact">
+    <p data-t="contactLead">Questions about your order? Contact us.</p>
+    <ul>
+      <li><a href="tel:+923210133232">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+        <span dir="ltr">+92 321 0133232</span></a></li>
+      <li><a href="https://wa.me/923210133232" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.2 18.6z"/><path d="M9 10.5h6M9 13.5h4"/></svg>
+        <span dir="ltr">WhatsApp</span></a></li>
+      <li><a href="https://sultanpulao.com" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <span dir="ltr">sultanpulao.com</span></a></li>
+      <li><a href="https://www.instagram.com/sultanyakhnipulao/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span dir="ltr">@sultanyakhnipulao</span></a></li>
+    </ul>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+
+  // Where responses go. Leave empty while testing: each response is printed to the
+  // browser console. Paste a Google Apps Script web-app URL (or your own API URL)
+  // here to collect responses for real.
+  const SUBMIT_URL = "";
+
+  // Branches, in the order customers see them. Add new branches here.
+  // A link ending in #<id> preselects that branch, e.g. index.html#daska,
+  // so each branch can print its own QR code.
+  const BRANCHES = [
+    { id: "paka-garah", name: "SYP Paka Garah, Kashmir Rd." },
+    { id: "kashmir-park", name: "SYP Kashmir Park" },
+    { id: "daska", name: "SYP Daska" },
+    { id: "akbarabad", name: "SYP Akbarabad" },
+    { id: "johar-town", name: "Sultan Johar Town" }
+  ];
+
+  const L = (en, ur) => ({ en, ur });
+  const o = (value, en, ur) => ({ value, en, ur });
+
+  const UI = {
+    eyebrow: L("Customer feedback", "آپ کی رائے"),
+    title: L("How was your meal today?", "آج کا کھانا کیسا رہا؟"),
+    lede: L("Under a minute. The extra questions at the end are optional.", "ایک منٹ سے کم وقت۔ آخر کے اضافی سوال اختیاری ہیں۔"),
+    stepOf: L((a, b) => `Step ${a} of ${b}`, (a, b) => `مرحلہ ${a} از ${b}`),
+    next: L("Next", "اگلا"),
+    back: L("Back", "پیچھے"),
+    sendNow: L("Send now", "ابھی بھیجیں"),
+    submit: L("Send feedback", "فیڈبیک بھیجیں"),
+    sending: L("Sending…", "بھیجا جا رہا ہے…"),
+    required: L("Please answer this question.", "براہ کرم اس سوال کا جواب دیں۔"),
+    fixErrors: L("Answer the highlighted questions to continue.", "آگے بڑھنے کے لیے نشان زدہ سوالوں کے جواب دیں۔"),
+    pickAll: L("Tap all that apply", "جو بھی لیا سب منتخب کریں"),
+    pickAny: L("Tap any", "جو چاہیں منتخب کریں"),
+    branchPlaceholder: L("Choose your branch", "اپنی برانچ منتخب کریں"),
+    otherItem: L("What else did you order?", "اور کیا آرڈر کیا؟"),
+    name: L("Name", "نام"),
+    phone: L("Mobile number", "موبائل نمبر"),
+    phoneMissing: L("Enter your mobile number to get offers, like 0300 1234567.", "آفرز کے لیے اپنا موبائل نمبر لکھیں، جیسے 0300 1234567"),
+    commentsPh: L("A compliment, a complaint, or anything we missed", "تعریف، شکایت، یا کوئی بھی بات جو ہم نے نہیں پوچھی"),
+    ratings: [L("Very bad", "بہت برا"), L("Bad", "برا"), L("Okay", "ٹھیک ہے"), L("Good", "اچھا"), L("Excellent", "بہترین")],
+    stars: L(n => n === 1 ? "1 star" : `${n} stars`, n => `${n} ستارے`),
+    sendFailed: L("Your feedback didn't send. Check your internet and tap Send again.", "فیڈبیک نہیں بھیجا جا سکا۔ انٹرنیٹ چیک کر کے دوبارہ کوشش کریں۔"),
+    thanksTitle: L("Shukriya!", "شکریہ!"),
+    thanksBody: L("Thank you for your feedback. We hope to serve you again soon.", "آپ کی رائے کا بہت شکریہ۔ امید ہے جلد دوبارہ آپ کی خدمت کا موقع ملے گا۔"),
+    again: L("Give feedback on another order", "کسی اور آرڈر پر فیڈبیک دیں"),
+    follow: L("Follow us on Instagram", "انسٹاگرام پر فالو کریں"),
+    orderAgain: L("Order again online", "دوبارہ آن لائن آرڈر کریں"),
+    contactLead: L("Questions about your order? Contact us.", "آرڈر کے بارے میں کوئی سوال؟ ہم سے رابطہ کریں۔")
+  };
+
+  const SIX = L("Six quick questions.", "صرف چھ آسان سوال۔");
+  const STEPS = [
+    { label: L("Visit", "برانچ"), title: L("Your order", "آپ کا آرڈر"), sub: L("Pick your branch, then tap how you got your order.", "اپنی برانچ منتخب کریں، پھر بتائیں آرڈر کیسے لیا۔") },
+    { service: true },
+    { label: L("Optional", "اختیاری"), title: L("A few more, if you have time", "وقت ہو تو چند مزید سوال"), sub: L("All optional. Answer any you like, then tap Send.", "سب سوال اختیاری ہیں۔ جتنے چاہیں جواب دیں، پھر بھیج دیں۔") }
+  ];
+  const SERVICE_STEP = {
+    dine_in: { label: L("Dine-in", "ڈائن اِن"), title: L("Your visit", "ریسٹورنٹ کا تجربہ"), sub: SIX },
+    delivery: { label: L("Delivery", "ڈیلیوری"), title: L("Your delivery", "ڈیلیوری کا تجربہ"), sub: SIX },
+    takeaway: { label: L("Takeaway", "ٹیک اوے"), title: L("Your pickup", "ٹیک اوے کا تجربہ"), sub: SIX },
+    none: { label: L("Review", "رائے"), title: L("Your experience", "آپ کا تجربہ"), sub: SIX }
+  };
+  const MORE_ABOUT = {
+    dine_in: L("More about your visit", "آپ کے وزٹ کے بارے میں مزید"),
+    delivery: L("More about your delivery", "ڈیلیوری کے بارے میں مزید"),
+    takeaway: L("More about your pickup", "ٹیک اوے کے بارے میں مزید")
+  };
+
+  const MENU = [
+    o("chicken_pulao", "Chicken Yakhni Pulao", "چکن یخنی پلاؤ"),
+    o("beef_pulao", "Beef Yakhni Pulao", "بیف یخنی پلاؤ"),
+    o("chicken_biryani", "Chicken Biryani", "چکن بریانی"),
+    o("beef_biryani", "Beef Biryani", "بیف بریانی"),
+    o("chapli", "Chapli Kabab", "چپلی کباب"),
+    o("shami", "Shami Kabab", "شامی کباب"),
+    o("mocktail", "Mocktail", "موکٹیل"),
+    o("other", "Other", "کچھ اور")
+  ];
+  const QUALITY = [
+    o("excellent", "Excellent", "بہترین"), o("very_good", "Very good", "بہت اچھا"), o("good", "Good", "اچھا"),
+    o("average", "Average", "درمیانہ"), o("needs_improvement", "Needs improvement", "بہتری کی ضرورت ہے")
+  ];
+  const AGAIN = [o("definitely", "Definitely", "ضرور"), o("maybe", "Maybe", "شاید"), o("no", "No", "نہیں")];
+
+  const ordered = a => (a.items || []).filter(v => v !== "other");
+  const has = (a, ...vals) => (a.items || []).some(v => vals.includes(v));
+  const svc = (...types) => a => types.includes(a.service);
+
+  // step 0: branch and service type (required)
+  // step 1: six required questions for the chosen service
+  // step 2: everything else, all optional, in three sections
+  const QUESTIONS = [
+    { step: 0, key: "branch", kind: "select", required: true,
+      title: L("Which branch did you order from?", "آپ نے کس برانچ سے آرڈر کیا؟") },
+    { step: 0, key: "service", kind: "cards", required: true,
+      title: L("How did you get your order?", "آپ نے آرڈر کیسے لیا؟"),
+      options: [o("dine_in", "Dine-in", "ریسٹورنٹ میں کھایا"), o("takeaway", "Takeaway", "ٹیک اوے"), o("delivery", "Delivery", "ہوم ڈیلیوری")] },
+
+    // Required: food (everyone) + five per service
+    { step: 1, key: "food", kind: "stars", required: true,
+      title: L("How was the food?", "کھانا کیسا تھا؟"), hint: L("Taste, freshness and quantity", "ذائقہ، تازگی اور مقدار") },
+
+    { step: 1, key: "staff_welcome", kind: "stars", required: true, when: svc("dine_in"),
+      title: L("How welcoming was our staff?", "ہمارے عملے نے آپ کا استقبال کیسے کیا؟") },
+    { step: 1, key: "food_time", kind: "choice", required: true, when: svc("dine_in"),
+      title: L("How long did your food take?", "کھانا آنے میں کتنا وقت لگا؟"),
+      options: [o("under_10", "Less than 10 minutes", "10 منٹ سے کم"), o("10_20", "10–20 minutes", "10 سے 20 منٹ"), o("20_30", "20–30 minutes", "20 سے 30 منٹ"), o("over_30", "More than 30 minutes", "30 منٹ سے زیادہ")] },
+    { step: 1, key: "cleanliness", kind: "stars", required: true, when: svc("dine_in"),
+      title: L("How was the restaurant's cleanliness?", "ریسٹورنٹ کی صفائی کیسی تھی؟") },
+    { step: 1, key: "ambiance", kind: "choice", required: true, when: svc("dine_in"),
+      title: L("How was the ambiance?", "ماحول کیسا تھا؟"),
+      options: [o("excellent", "Excellent", "بہترین"), o("good", "Good", "اچھا"), o("average", "Average", "درمیانہ"), o("needs_improvement", "Needs improvement", "بہتری کی ضرورت ہے")] },
+    { step: 1, key: "dine_again", kind: "choice", required: true, when: svc("dine_in"),
+      title: L("Would you dine with us again?", "کیا آپ دوبارہ ہمارے ہاں کھانا کھانے آئیں گے؟"),
+      options: [o("definitely", "Definitely", "ضرور"), o("maybe", "Maybe", "شاید"), o("probably_not", "Probably not", "شاید نہیں")] },
+
+    { step: 1, key: "on_time", kind: "choice", required: true, when: svc("delivery"),
+      title: L("Was your order delivered on time?", "کیا آرڈر وقت پر پہنچا؟"),
+      options: [o("early", "Before time", "وقت سے پہلے"), o("on_time", "On time", "وقت پر"), o("slightly_late", "Slightly late", "تھوڑی دیر سے"), o("very_late", "Very late", "بہت دیر سے")] },
+    { step: 1, key: "arrived_hot", kind: "choice", required: true, when: svc("delivery"),
+      title: L("Did your food arrive hot?", "کیا کھانا گرم پہنچا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("warm", "Warm", "نیم گرم"), o("cold", "Cold", "ٹھنڈا")] },
+    { step: 1, key: "delivery_complete", kind: "choice", required: true, when: svc("delivery"),
+      title: L("Was your order complete?", "کیا آپ کا آرڈر مکمل تھا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("missing_items", "Missing items", "کچھ چیزیں کم تھیں")] },
+    { step: 1, key: "rider_behaviour", kind: "choice", required: true, when: svc("delivery"),
+      title: L("How was the rider's behaviour?", "رائیڈر کا رویہ کیسا تھا؟"),
+      options: [o("excellent", "Excellent", "بہترین"), o("friendly", "Friendly", "دوستانہ"), o("average", "Average", "درمیانہ"), o("poor", "Poor", "خراب")] },
+    { step: 1, key: "order_again", kind: "choice", required: true, when: svc("delivery"),
+      title: L("Would you order from Sultan again?", "کیا آپ سلطان سے دوبارہ آرڈر کریں گے؟"), options: AGAIN },
+
+    { step: 1, key: "greeted_politely", kind: "choice", required: true, when: svc("takeaway"),
+      title: L("Were you greeted politely by our staff?", "کیا عملے نے آپ سے خوش اخلاقی سے بات کی؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("somewhat", "Somewhat", "کسی حد تک"), o("no", "No", "نہیں")] },
+    { step: 1, key: "ready_on_arrival", kind: "choice", required: true, when: svc("takeaway"),
+      title: L("Was your order ready when you arrived?", "کیا آپ کے پہنچنے پر آرڈر تیار تھا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("almost", "Almost ready", "تقریباً تیار"), o("no", "No", "نہیں")] },
+    { step: 1, key: "takeaway_complete", kind: "choice", required: true, when: svc("takeaway"),
+      title: L("Was your order complete?", "کیا آپ کا آرڈر مکمل تھا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("no", "No", "نہیں")] },
+    { step: 1, key: "packaging_neat", kind: "stars", required: true, when: svc("takeaway"),
+      title: L("Was the packaging neat and secure?", "کیا پیکنگ صاف اور محفوظ تھی؟") },
+    { step: 1, key: "takeaway_again", kind: "choice", required: true, when: svc("takeaway"),
+      title: L("Would you choose takeaway from Sultan again?", "کیا آپ دوبارہ سلطان سے ٹیک اوے لیں گے؟"), options: AGAIN },
+
+    // Optional: the food
+    { step: 2, key: "g_food", kind: "group", title: L("More about the food", "کھانے کے بارے میں مزید") },
+    { step: 2, key: "items", kind: "multi", title: L("What did you order today?", "آج آپ نے کیا آرڈر کیا؟"), hint: UI.pickAll, options: MENU },
+    { step: 2, key: "favorite", kind: "choice", when: a => ordered(a).length >= 2,
+      title: L("Which item was your favourite today?", "آج آپ کو سب سے زیادہ کیا پسند آیا؟"),
+      options: a => MENU.filter(m => ordered(a).includes(m.value)) },
+    { step: 2, key: "pulao_rating", kind: "choice", when: a => has(a, "chicken_pulao", "beef_pulao"),
+      title: L("How was the Yakhni Pulao?", "یخنی پلاؤ کیسا تھا؟"), options: QUALITY },
+    { step: 2, key: "biryani_rating", kind: "choice", when: a => has(a, "chicken_biryani", "beef_biryani"),
+      title: L("How was the Biryani?", "بریانی کیسی تھی؟"), options: QUALITY },
+    { step: 2, key: "chapli_rating", kind: "choice", when: a => has(a, "chapli"),
+      title: L("How was the Chapli Kabab?", "چپلی کباب کیسا تھا؟"), options: QUALITY },
+    { step: 2, key: "fresh", kind: "choice", title: L("Was the food fresh?", "کیا کھانا تازہ تھا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("mostly", "Mostly", "زیادہ تر"), o("no", "No", "نہیں")] },
+    { step: 2, key: "temperature", kind: "choice", when: svc("dine_in", "takeaway"),
+      title: L("Was the food served at the right temperature?", "کیا کھانا مناسب گرم پیش کیا گیا؟"),
+      options: [o("perfect", "Perfect", "بالکل ٹھیک"), o("slightly_cold", "Slightly cold", "تھوڑا ٹھنڈا"), o("cold", "Cold", "ٹھنڈا")] },
+    { step: 2, key: "spice", kind: "choice", title: L("How was the spice level?", "مرچ مصالحہ کیسا تھا؟"),
+      options: [o("perfect", "Perfect", "بالکل ٹھیک"), o("too_spicy", "Too spicy", "بہت تیز"), o("not_enough", "Not spicy enough", "مرچ کم تھی")] },
+    { step: 2, key: "portion", kind: "choice", title: L("How was the portion size?", "مقدار کیسی تھی؟"),
+      options: [o("more", "More than enough", "ضرورت سے زیادہ"), o("right", "Just right", "بالکل مناسب"), o("small", "Too small", "بہت کم")] },
+    { step: 2, key: "side", kind: "choice", title: L("Which side did you enjoy the most?", "سائیڈ میں سب سے زیادہ کیا پسند آیا؟"),
+      options: [o("raita", "Raita", "رائتہ"), o("salad", "Salad", "سلاد"), o("shami", "Shami Kabab", "شامی کباب"), o("chapli", "Chapli Kabab", "چپلی کباب"), o("none", "None", "کوئی نہیں")] },
+    { step: 2, key: "prefer", kind: "choice", title: L("Which do you prefer?", "آپ کو کیا زیادہ پسند ہے؟"),
+      options: [o("chicken_pulao", "Chicken Yakhni Pulao", "چکن یخنی پلاؤ"), o("chicken_biryani", "Chicken Biryani", "چکن بریانی")] },
+
+    // Optional: the rest of the chosen service
+    { step: 2, key: "g_service", kind: "group", when: a => Boolean(a.service), title: a => MORE_ABOUT[a.service] },
+    { step: 2, key: "seated", kind: "choice", when: svc("dine_in"),
+      title: L("How quickly were you seated?", "آپ کو کتنی جلدی بٹھایا گیا؟"),
+      options: [o("immediately", "Immediately", "فوراً"), o("within_5", "Within 5 minutes", "5 منٹ کے اندر"), o("5_10", "5–10 minutes", "5 سے 10 منٹ"), o("over_10", "More than 10 minutes", "10 منٹ سے زیادہ")] },
+    { step: 2, key: "presentation", kind: "choice", when: svc("dine_in"),
+      title: L("How was the food presentation?", "کھانا پیش کرنے کا انداز کیسا تھا؟"),
+      options: [o("excellent", "Excellent", "بہترین"), o("good", "Good", "اچھا"), o("average", "Average", "درمیانہ"), o("poor", "Poor", "خراب")] },
+    { step: 2, key: "staff_check", kind: "choice", when: svc("dine_in"),
+      title: L("Did our staff check on you during your meal?", "کیا کھانے کے دوران عملے نے آپ کا حال پوچھا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("once", "Once", "ایک بار"), o("no", "No", "نہیں")] },
+    { step: 2, key: "platform", kind: "choice", when: svc("delivery"),
+      title: L("Which platform did you order from?", "آپ نے کہاں سے آرڈر کیا؟"),
+      options: [o("website", "Sultan website", "سلطان ویب سائٹ"), o("whatsapp", "WhatsApp", "واٹس ایپ"), o("phone", "Phone call", "فون کال"), o("foodpanda", "Foodpanda", "فوڈ پانڈا"), o("other", "Other", "کوئی اور")] },
+    { step: 2, key: "order_ease", kind: "stars", when: svc("delivery", "takeaway"),
+      title: L("How easy was it to place your order?", "آرڈر دینا کتنا آسان تھا؟") },
+    { step: 2, key: "ordering_system", kind: "choice", when: a => a.service === "delivery" && ["website", "whatsapp"].includes(a.platform),
+      title: L("How was our ordering system (website / WhatsApp / bot)?", "ہمارا آرڈر سسٹم (ویب سائٹ / واٹس ایپ / بوٹ) کیسا لگا؟"),
+      options: [o("very_easy", "Very easy", "بہت آسان"), o("easy", "Easy", "آسان"), o("average", "Average", "درمیانہ"), o("difficult", "Difficult", "مشکل")] },
+    { step: 2, key: "confirmed_quickly", kind: "choice", when: svc("delivery"),
+      title: L("Was your order confirmed quickly?", "کیا آپ کا آرڈر جلدی کنفرم ہوا؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("some_time", "Took some time", "کچھ وقت لگا"), o("no", "No", "نہیں")] },
+    { step: 2, key: "packaging_secure", kind: "stars", when: svc("delivery"),
+      title: L("Was the packaging secure?", "کیا پیکنگ محفوظ تھی؟") },
+    { step: 2, key: "pickup_wait", kind: "choice", when: svc("takeaway"),
+      title: L("Did you have to wait?", "کیا آپ کو انتظار کرنا پڑا؟"),
+      options: [o("no_wait", "No wait", "کوئی انتظار نہیں"), o("under_5", "Less than 5 minutes", "5 منٹ سے کم"), o("5_10", "5–10 minutes", "5 سے 10 منٹ"), o("over_10", "More than 10 minutes", "10 منٹ سے زیادہ")] },
+    { step: 2, key: "pickup_smooth", kind: "choice", when: svc("takeaway"),
+      title: L("Was the pickup process smooth?", "آرڈر لینے کا عمل کیسا رہا؟"),
+      options: [o("very_smooth", "Very smooth", "بہت آسان"), o("smooth", "Smooth", "آسان"), o("average", "Average", "درمیانہ"), o("difficult", "Difficult", "مشکل")] },
+
+    // Optional: business insight
+    { step: 2, key: "g_you", kind: "group", title: L("About you", "آپ کے بارے میں") },
+    { step: 2, key: "heard_from", kind: "choice", title: L("How did you hear about Sultan?", "آپ کو سلطان کے بارے میں کیسے پتا چلا؟"),
+      options: [o("instagram", "Instagram", "انسٹاگرام"), o("facebook", "Facebook", "فیس بک"), o("tiktok", "TikTok", "ٹک ٹاک"), o("google", "Google", "گوگل"),
+        o("friends", "Friend or family", "دوست یا گھر والے"), o("walk_in", "Walk-in", "خود ریسٹورنٹ آئے"), o("foodpanda", "Foodpanda", "فوڈ پانڈا"), o("passing_by", "Passing by", "پاس سے گزرتے ہوئے دیکھا")] },
+    { step: 2, key: "visit_frequency", kind: "choice", title: L("How often do you visit Sultan?", "آپ کتنی بار سلطان آتے ہیں؟"),
+      options: [o("first_time", "First time", "پہلی بار"), o("weekly", "Weekly", "ہر ہفتے"), o("monthly", "Monthly", "ہر مہینے"), o("occasionally", "Occasionally", "کبھی کبھار"), o("regular", "Regular customer", "مستقل گاہک")] },
+    { step: 2, key: "improve_most", kind: "choice", title: L("What should we improve the most?", "ہمیں سب سے زیادہ کس چیز میں بہتری لانی چاہیے؟"),
+      options: [o("taste", "Taste", "ذائقہ"), o("service", "Service", "سروس"), o("waiting", "Waiting time", "انتظار کا وقت"), o("ambiance", "Ambiance", "ماحول"),
+        o("packaging", "Packaging", "پیکنگ"), o("pricing", "Pricing", "قیمت"), o("delivery_speed", "Delivery speed", "ڈیلیوری کی رفتار")] },
+    { step: 2, key: "menu_wishes", kind: "multi", title: L("What would you like added to our menu?", "آپ ہمارے مینیو میں کیا شامل دیکھنا چاہیں گے؟"), hint: UI.pickAny,
+      options: [o("bbq", "More BBQ", "مزید باربی کیو"), o("rice", "More rice options", "چاولوں کی مزید اقسام"), o("desserts", "Desserts", "میٹھا"),
+        o("beverages", "Beverages", "مشروبات"), o("family_deals", "Family deals", "فیملی ڈیلز"), o("kids_meals", "Kids meals", "بچوں کے کھانے")] },
+    { step: 2, key: "offers", kind: "choice", title: L("Would you like to receive special offers and discounts?", "کیا آپ خصوصی آفرز اور ڈسکاؤنٹس حاصل کرنا چاہیں گے؟"),
+      options: [o("yes", "Yes", "جی ہاں"), o("no", "No", "نہیں")] },
+    { step: 2, key: "comments", kind: "text", title: L("Anything else you'd like to tell us?", "کچھ اور بتانا چاہیں گے؟") }
+  ];
+  const byKey = Object.fromEntries(QUESTIONS.map(q => [q.key, q]));
+  const LAST = STEPS.length - 1;
+
+  const $ = id => document.getElementById(id);
+  const app = $("app"), form = $("form"), list = $("questions"), formMsg = $("form-msg");
+  const submitBtn = $("submit"), sendNowBtn = $("send-now"), backBtn = $("back"), thanks = $("thanks"), intro = $("intro");
+
+  let lang = "en";
+  try { if (localStorage.getItem("syp-feedback-lang") === "ur") lang = "ur"; } catch (_) { /* storage unavailable */ }
+  const tr = x => x[lang];
+
+  let answers, text, current;
+  reset();
+
+  function reset() {
+    answers = {};
+    text = {};
+    current = 0;
+    branchFromHash();
+  }
+  function branchFromHash() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    if (BRANCHES.some(b => b.id === id)) answers.branch = id;
+  }
+
+  const optionsOf = q => typeof q.options === "function" ? q.options(answers) : q.options;
+  const titleOf = q => (typeof q.title === "function" ? q.title(answers) : q.title) || L("", "");
+  const isVisible = q => !q.when || q.when(answers);
+  const isAnswered = q => {
+    if (q.kind === "text") return Boolean((text[q.key] || "").trim());
+    const v = answers[q.key];
+    return Array.isArray(v) ? v.length > 0 : Boolean(v);
+  };
+  const validPhone = v => /^(03\d{9}|923\d{9})$/.test((v || "").replace(/\D/g, ""));
+  const smooth = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  const stepInfo = i => STEPS[i].service ? SERVICE_STEP[answers.service || "none"] : STEPS[i];
+
+  const STAR_PATH = "M12 2.6l2.82 5.72 6.31.92-4.57 4.45 1.08 6.29L12 17.02l-5.64 2.96 1.08-6.29L2.87 9.24l6.31-.92z";
+  const ICONS = {
+    dine_in: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12.5" cy="12" r="5"/><circle cx="12.5" cy="12" r="2.4"/><path d="M3.5 3.5V8a1.5 1.5 0 0 0 3 0V3.5M5 9.5v11M20.5 3.5c-1.4.9-2 2.7-2 5.5h2v11.5"/></svg>',
+    takeaway: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 12.5H6.2z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></svg>',
+    delivery: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="17" r="2.5"/><circle cx="18.5" cy="17" r="2.5"/><path d="M8 17h6.5l2.5-6h3"/><path d="M14.5 17L12 11H9.5"/><path d="M17 11l-1.5-4H13"/><rect x="2.5" y="7" width="6" height="5" rx="1"/></svg>'
+  };
+
+  function bodyHTML(q) {
+    const k = q.key;
+    if (q.kind === "select") {
+      return `<div class="select"><select id="branch-input" name="branch" aria-labelledby="${k}-title">` +
+        `<option value="">${tr(UI.branchPlaceholder)}</option>` +
+        BRANCHES.map(b => `<option value="${b.id}">${b.name}</option>`).join("") + `</select></div>`;
+    }
+    if (q.kind === "cards") {
+      return `<div class="choices" role="radiogroup" aria-labelledby="${k}-title">` +
+        optionsOf(q).map(op =>
+          `<label class="choice"><input type="radio" name="${k}" value="${op.value}" id="${k}-${op.value}">` +
+          `<span>${ICONS[op.value]}${tr(op)}</span></label>`
+        ).join("") + `</div>`;
+    }
+    if (q.kind === "stars") {
+      return `<div class="stars" role="radiogroup" aria-labelledby="${k}-title">` +
+        [1, 2, 3, 4, 5].map(n =>
+          `<label class="star" data-n="${n}"><input type="radio" name="${k}" value="${n}" id="${k}-${n}" aria-label="${tr(UI.stars)(n)}, ${tr(UI.ratings[n - 1])}">` +
+          `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="${STAR_PATH}"/></svg></label>`
+        ).join("") + `</div><p class="star-caption" id="${k}-caption" aria-hidden="true"></p>`;
+    }
+    if (q.kind === "text") {
+      return `<textarea id="comments" data-text="comments" rows="3" maxlength="1000" aria-labelledby="${k}-title" placeholder="${tr(UI.commentsPh)}"></textarea>`;
+    }
+    const multi = q.kind === "multi";
+    let html = `<div class="pills" role="${multi ? "group" : "radiogroup"}" aria-labelledby="${k}-title">` +
+      optionsOf(q).map(op =>
+        `<label class="pill"><input type="${multi ? "checkbox" : "radio"}" name="${k}" value="${op.value}" id="${k}-${op.value}">` +
+        `<span>${tr(op)}</span></label>`
+      ).join("") + `</div>`;
+    if (k === "items") {
+      html += `<div class="extra single" id="items-extra" hidden><div class="field">` +
+        `<label for="other_item">${tr(UI.otherItem)}</label>` +
+        `<input id="other_item" data-text="other_item" type="text" maxlength="80"></div></div>`;
+    }
+    if (k === "offers") {
+      html += `<div class="extra" id="offers-extra" hidden>` +
+        `<div class="field"><label for="name">${tr(UI.name)}</label><input id="name" data-text="name" type="text" autocomplete="name" maxlength="80"></div>` +
+        `<div class="field"><label for="phone">${tr(UI.phone)}</label><input id="phone" data-text="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" dir="ltr" placeholder="03XX XXXXXXX"></div></div>`;
+    }
+    return html;
+  }
+
+  function questionHTML(q) {
+    if (q.kind === "group") {
+      return `<div class="group-head" id="q-${q.key}" hidden><h3></h3></div>`;
+    }
+    const hint = q.hint ? `<p class="q-hint">${tr(q.hint)}</p>` : "";
+    return `<section class="q" id="q-${q.key}" data-key="${q.key}" hidden>
+      <div class="q-head"><span class="q-num" aria-hidden="true"></span><div><h3 class="q-title" id="${q.key}-title">${tr(q.title)}</h3>${hint}</div></div>
+      <div class="q-body">${bodyHTML(q)}</div>
+      <p class="q-error" id="${q.key}-error" hidden></p>
+    </section>`;
+  }
+
+  function checkSaved(q) {
+    const v = answers[q.key];
+    if (!v) return;
+    if (q.kind === "select") { $("branch-input").value = v; return; }
+    (Array.isArray(v) ? v : [v]).forEach(x => { const el = $(`${q.key}-${x}`); if (el) el.checked = true; });
+  }
+
+  function render() {
+    app.lang = lang;
+    app.dir = lang === "ur" ? "rtl" : "ltr";
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    document.querySelectorAll("[data-t]").forEach(el => { el.textContent = tr(UI[el.dataset.t]); });
+
+    list.innerHTML = QUESTIONS.map(questionHTML).join("");
+    QUESTIONS.forEach(checkSaved);
+    list.querySelectorAll("[data-text]").forEach(el => { el.value = text[el.dataset.text] || ""; });
+    $("q-favorite").dataset.sig = optionsOf(byKey.favorite).map(x => x.value).join(",");
+    formMsg.hidden = true;
+    sync();
+  }
+
+  // The favourite question only offers the dishes the customer ordered.
+  function refreshFavorite() {
+    const q = byKey.favorite;
+    const opts = optionsOf(q);
+    if (answers.favorite && !opts.some(x => x.value === answers.favorite)) delete answers.favorite;
+    const sec = $("q-favorite");
+    const sig = opts.map(x => x.value).join(",");
+    if (sec.dataset.sig === sig) return;
+    sec.dataset.sig = sig;
+    sec.querySelector(".q-body").innerHTML = bodyHTML(q);
+    checkSaved(q);
+  }
+
+  function sync() {
+    refreshFavorite();
+    let shown = 0;
+    QUESTIONS.forEach(q => {
+      const sec = $("q-" + q.key);
+      const visible = q.step === current && isVisible(q);
+      sec.hidden = !visible;
+      if (!visible) return;
+      if (q.kind === "group") {
+        sec.firstElementChild.textContent = tr(titleOf(q));
+        return;
+      }
+      shown++;
+      sec.querySelector(".q-num").textContent = shown;
+      if (q.kind === "stars") {
+        const v = answers[q.key] || 0;
+        sec.querySelectorAll(".star").forEach(s => s.classList.toggle("on", Number(s.dataset.n) <= v));
+        $(q.key + "-caption").textContent = v ? tr(UI.ratings[v - 1]) : "";
+      }
+    });
+    $("items-extra").hidden = !(answers.items || []).includes("other");
+    $("offers-extra").hidden = answers.offers !== "yes";
+
+    document.querySelectorAll("#steps li").forEach((li, i) => {
+      li.className = i < current ? "done" : i === current ? "current" : "";
+      if (i === current) li.setAttribute("aria-current", "step"); else li.removeAttribute("aria-current");
+      li.querySelector(".step-label").textContent = tr(stepInfo(i).label);
+    });
+    const info = stepInfo(current);
+    $("step-kicker").textContent = tr(UI.stepOf)(current + 1, STEPS.length);
+    $("step-title").textContent = tr(info.title);
+    $("step-sub").textContent = tr(info.sub);
+
+    backBtn.hidden = current === 0;
+    submitBtn.hidden = current === 0;
+    sendNowBtn.hidden = current !== 1;
+    submitBtn.textContent = tr(current === LAST ? UI.submit : UI.next);
+  }
+
+  function showError(q, msg) {
+    $("q-" + q.key).classList.toggle("invalid", Boolean(msg));
+    const err = $(q.key + "-error");
+    err.textContent = msg;
+    err.hidden = !msg;
+  }
+
+  // Checks the current step; shows what's missing and returns false if anything is.
+  function stepIsValid() {
+    const failed = [];
+    QUESTIONS.forEach(q => {
+      if (q.step !== current || q.kind === "group" || !isVisible(q)) return;
+      let msg = "";
+      if (q.required && !isAnswered(q)) msg = tr(UI.required);
+      if (q.key === "offers" && answers.offers === "yes" && !validPhone(text.phone)) msg = tr(UI.phoneMissing);
+      showError(q, msg);
+      if (msg) failed.push(q);
+    });
+    if (!failed.length) {
+      formMsg.hidden = true;
+      return true;
+    }
+    formMsg.textContent = tr(UI.fixErrors);
+    formMsg.hidden = false;
+    const first = failed[0];
+    const sec = $("q-" + first.key);
+    sec.scrollIntoView({ behavior: smooth(), block: "center" });
+    const target = first.key === "offers" && answers.offers === "yes" ? $("phone") : sec.querySelector("input, select");
+    if (target) target.focus({ preventScroll: true });
+    return false;
+  }
+
+  function goTo(step) {
+    current = step;
+    formMsg.hidden = true;
+    QUESTIONS.forEach(q => { if (q.kind !== "group") showError(q, ""); });
+    sync();
+    $("panel").scrollIntoView({ behavior: smooth(), block: "start" });
+    $("step-title").focus({ preventScroll: true });
+  }
+
+  list.addEventListener("change", e => {
+    const el = e.target;
+    if (el.dataset.text) return;
+    const sec = el.closest(".q");
+    if (!sec) return;
+    const q = byKey[sec.dataset.key];
+    if (q.kind === "multi") {
+      answers[q.key] = [...sec.querySelectorAll(`input[name="${q.key}"]:checked`)].map(x => x.value);
+    } else {
+      answers[q.key] = q.kind === "stars" ? Number(el.value) : el.value;
+    }
+    if (q.required) showError(q, "");
+    if (q.key === "offers" && answers.offers !== "yes") showError(q, "");
+    sync();
+    if (q.key === "branch" && answers.branch && answers.service) moveOn();
+  });
+
+  // The first step has no Next button: picking the order type (with a branch chosen)
+  // moves straight on. Arrow keys only select; Enter or Space confirms.
+  let moveTimer = 0;
+  function moveOn() {
+    clearTimeout(moveTimer);
+    moveTimer = setTimeout(() => { if (current === 0) goTo(1); }, 300);
+  }
+  function servicePicked(value) {
+    answers.service = value;
+    if (answers.branch) moveOn();
+    else stepIsValid();
+  }
+  list.addEventListener("click", e => {
+    const el = e.target;
+    if (current !== 0 || el.name !== "service" || e.detail === 0) return;
+    servicePicked(el.value);
+  });
+  list.addEventListener("keydown", e => {
+    const el = e.target;
+    if (current !== 0 || el.name !== "service" || (e.key !== "Enter" && e.key !== " ")) return;
+    e.preventDefault();
+    if (!el.checked) {
+      el.checked = true;
+      el.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    servicePicked(el.value);
+  });
+
+  list.addEventListener("input", e => {
+    const el = e.target;
+    if (!el.dataset.text) return;
+    text[el.dataset.text] = el.value;
+    if (el.dataset.text === "phone" && validPhone(el.value)) showError(byKey.offers, "");
+  });
+
+  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
+    if (b.dataset.lang === lang) return;
+    lang = b.dataset.lang;
+    try { localStorage.setItem("syp-feedback-lang", lang); } catch (_) { /* storage unavailable */ }
+    render();
+  }));
+
+  window.addEventListener("hashchange", () => {
+    branchFromHash();
+    checkSaved(byKey.branch);
+    sync();
+  });
+
+  backBtn.addEventListener("click", () => { if (current > 0) goTo(current - 1); });
+
+  function englishLabel(q, value) {
+    const op = optionsOf(q).find(x => x.value === value);
+    return op ? op.en : value;
+  }
+
+  function buildPayload() {
+    const branch = BRANCHES.find(b => b.id === answers.branch);
+    const payload = {
+      submitted_at: new Date().toISOString(),
+      language: lang,
+      branch: branch ? branch.name : ""
+    };
+    QUESTIONS.forEach(q => {
+      if (q.key === "branch" || q.kind === "group" || q.kind === "text" || !isVisible(q) || !isAnswered(q)) return;
+      const v = answers[q.key];
+      if (q.kind === "stars") payload[q.key] = v;
+      else if (Array.isArray(v)) payload[q.key] = v.map(x => englishLabel(q, x)).join(", ");
+      else payload[q.key] = englishLabel(q, v);
+    });
+    if ((answers.items || []).includes("other")) payload.other_item = (text.other_item || "").trim();
+    if (answers.offers === "yes") {
+      payload.name = (text.name || "").trim();
+      payload.phone = (text.phone || "").trim();
+    }
+    payload.comments = (text.comments || "").trim();
+    return payload;
+  }
+
+  async function send(payload) {
+    console.info("Sultan Yakhni Pulao feedback", payload);
+    if (!SUBMIT_URL) return;
+    // text/plain avoids a CORS preflight, which Google Apps Script does not answer.
+    const res = await fetch(SUBMIT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+  }
+
+  async function finish(button) {
+    submitBtn.disabled = sendNowBtn.disabled = backBtn.disabled = true;
+    button.textContent = tr(UI.sending);
+    try {
+      await send(buildPayload());
+      form.hidden = true;
+      intro.hidden = true;
+      thanks.hidden = false;
+      window.scrollTo(0, 0);
+      $("thanks-title").focus();
+    } catch (err) {
+      console.error(err);
+      formMsg.textContent = tr(UI.sendFailed);
+      formMsg.hidden = false;
+    } finally {
+      submitBtn.disabled = sendNowBtn.disabled = backBtn.disabled = false;
+      sendNowBtn.textContent = tr(UI.sendNow);
+      sync();
+    }
+  }
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (!stepIsValid()) return;
+    if (current < LAST) goTo(current + 1);
+    else finish(submitBtn);
+  });
+
+  // Lets customers skip the optional step once the six required questions are answered.
+  sendNowBtn.addEventListener("click", () => {
+    if (stepIsValid()) finish(sendNowBtn);
+  });
+
+  $("again").addEventListener("click", () => {
+    reset();
+    thanks.hidden = true;
+    intro.hidden = false;
+    form.hidden = false;
+    render();
+    window.scrollTo(0, 0);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
