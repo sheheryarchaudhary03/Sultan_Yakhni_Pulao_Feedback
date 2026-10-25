@@ -19,7 +19,7 @@ def _blank_to_none(v):
 
 
 class FeedbackIn(_Model):
-    language: Literal["en", "ur"] = "en"
+    language: Literal["en", "ur", "roman"] = "en"
     answers: dict[str, StrictInt | StrictStr | list[StrictStr]] = Field(max_length=80)
     comments: str | None = Field(default=None, max_length=1000)
     other_item: str | None = Field(default=None, max_length=80)

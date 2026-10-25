@@ -9,52 +9,65 @@
   const QUESTIONS = CATALOGUE.questions;
   const SUBMIT_URL = "/api/feedback";
 
-  const L = (en, ur) => ({ en, ur });
-
-  const UI = {
-    eyebrow: L("Customer feedback", "آپ کی رائے"),
-    title: L("How was your meal today?", "آج کا کھانا کیسا رہا؟"),
-    lede: L("Under a minute. The extra questions at the end are optional.", "ایک منٹ سے کم وقت۔ آخر کے اضافی سوال اختیاری ہیں۔"),
-    stepOf: L((a, b) => `Step ${a} of ${b}`, (a, b) => `مرحلہ ${a} از ${b}`),
-    next: L("Next", "اگلا"),
-    back: L("Back", "پیچھے"),
-    sendNow: L("Send now", "ابھی بھیجیں"),
-    submit: L("Send feedback", "فیڈبیک بھیجیں"),
-    sending: L("Sending…", "بھیجا جا رہا ہے…"),
-    required: L("Please answer this question.", "براہ کرم اس سوال کا جواب دیں۔"),
-    fixErrors: L("Answer the highlighted questions to continue.", "آگے بڑھنے کے لیے نشان زدہ سوالوں کے جواب دیں۔"),
-    branchPlaceholder: L("Choose your branch", "اپنی برانچ منتخب کریں"),
-    otherItem: L("What else did you order?", "اور کیا آرڈر کیا؟"),
-    name: L("Your name", "آپ کا نام"),
-    phoneOptional: L("Mobile number (optional)", "موبائل نمبر (اختیاری)"),
-    phone: L("Mobile number for offers", "آفرز کے لیے موبائل نمبر"),
-    nameMissing: L("Please enter your name.", "براہ کرم اپنا نام لکھیں۔"),
-    phoneInvalid: L("Enter a mobile number like 0300 1234567, or leave it empty.", "موبائل نمبر اس طرح لکھیں: 0300 1234567، یا خالی چھوڑ دیں۔"),
-    phoneMissing: L("Enter your mobile number to get offers, like 0300 1234567.", "آفرز کے لیے اپنا موبائل نمبر لکھیں، جیسے 0300 1234567"),
-    commentsPh: L("A compliment, a complaint, or anything we missed", "تعریف، شکایت، یا کوئی بھی بات جو ہم نے نہیں پوچھی"),
-    ratings: [L("Very bad", "بہت برا"), L("Bad", "برا"), L("Okay", "ٹھیک ہے"), L("Good", "اچھا"), L("Excellent", "بہترین")],
-    stars: L(n => n === 1 ? "1 star" : `${n} stars`, n => `${n} ستارے`),
-    sendFailed: L("Your feedback didn't send. Check your internet and tap Send again.", "فیڈبیک نہیں بھیجا جا سکا۔ انٹرنیٹ چیک کر کے دوبارہ کوشش کریں۔"),
-    thanksTitle: L("Shukriya!", "شکریہ!"),
-    thanksBody: L("Thank you for your feedback. We hope to serve you again soon.", "آپ کی رائے کا بہت شکریہ۔ امید ہے جلد دوبارہ آپ کی خدمت کا موقع ملے گا۔"),
-    reference: L("Reference", "حوالہ نمبر"),
-    again: L("Give feedback on another order", "کسی اور آرڈر پر فیڈبیک دیں"),
-    follow: L("Follow us on Instagram", "انسٹاگرام پر فالو کریں"),
-    orderAgain: L("Order again online", "دوبارہ آن لائن آرڈر کریں"),
-    contactLead: L("Questions about your order? Contact us.", "آرڈر کے بارے میں کوئی سوال؟ ہم سے رابطہ کریں۔")
+  // Every on-screen text in English, Urdu script and Roman Urdu.
+  const L = (en, ur, roman) => ({ en, ur, roman });
+  const LANGS = {
+    en: { name: "English", tag: "en", dir: "ltr" },
+    ur: { name: "اردو", tag: "ur", dir: "rtl" },
+    roman: { name: "Roman Urdu", tag: "ur-Latn", dir: "ltr" }
   };
 
-  const SIX = L("Six quick questions and your name.", "چھ آسان سوال اور آپ کا نام۔");
+  const UI = {
+    eyebrow: L("Customer feedback", "آپ کی رائے", "Aap ki raaye"),
+    title: L("How was your meal today?", "آج کا کھانا کیسا رہا؟", "Aaj ka khana kaisa raha?"),
+    lede: L("Under a minute. The extra questions at the end are optional.", "ایک منٹ سے کم وقت۔ آخر کے اضافی سوال اختیاری ہیں۔", "Aik minute se kam waqt. Aakhir ke izafi sawal ikhtiyari hain."),
+    langLabel: L("Language", "زبان", "Zaban"),
+    langChange: L("Change", "تبدیل کریں", "Badlein"),
+    stepOf: L((a, b) => `Step ${a} of ${b}`, (a, b) => `مرحلہ ${a} از ${b}`, (a, b) => `Marhala ${a} az ${b}`),
+    next: L("Next", "اگلا", "Aagay"),
+    back: L("Back", "پیچھے", "Peechay"),
+    sendNow: L("Send now", "ابھی بھیجیں", "Abhi bhejein"),
+    submit: L("Send feedback", "فیڈبیک بھیجیں", "Feedback bhejein"),
+    sending: L("Sending…", "بھیجا جا رہا ہے…", "Bheja ja raha hai…"),
+    required: L("Please answer this question.", "براہ کرم اس سوال کا جواب دیں۔", "Baraye meharbani is sawal ka jawab dein."),
+    fixErrors: L("Answer the highlighted questions to continue.", "آگے بڑھنے کے لیے نشان زدہ سوالوں کے جواب دیں۔", "Aagay barhne ke liye nishan zada sawalon ke jawab dein."),
+    branchPlaceholder: L("Choose your branch", "اپنی برانچ منتخب کریں", "Apni branch chunein"),
+    otherItem: L("What else did you order?", "اور کیا آرڈر کیا؟", "Aur kya order kiya?"),
+    name: L("Your name", "آپ کا نام", "Aap ka naam"),
+    phoneOptional: L("Mobile number (optional)", "موبائل نمبر (اختیاری)", "Mobile number (ikhtiyari)"),
+    phone: L("Mobile number for offers", "آفرز کے لیے موبائل نمبر", "Offers ke liye mobile number"),
+    nameMissing: L("Please enter your name.", "براہ کرم اپنا نام لکھیں۔", "Baraye meharbani apna naam likhein."),
+    phoneInvalid: L("Enter a mobile number like 0300 1234567, or leave it empty.", "موبائل نمبر اس طرح لکھیں: 0300 1234567، یا خالی چھوڑ دیں۔", "Mobile number is tarah likhein: 0300 1234567, ya khali chor dein."),
+    phoneMissing: L("Enter your mobile number to get offers, like 0300 1234567.", "آفرز کے لیے اپنا موبائل نمبر لکھیں، جیسے 0300 1234567", "Offers ke liye apna mobile number likhein, jaise 0300 1234567."),
+    commentsPh: L("A compliment, a complaint, or anything we missed", "تعریف، شکایت، یا کوئی بھی بات جو ہم نے نہیں پوچھی", "Tareef, shikayat, ya koi bhi baat jo hum ne nahi poochi"),
+    ratings: [
+      L("Very bad", "بہت برا", "Bohat bura"), L("Bad", "برا", "Bura"), L("Okay", "ٹھیک ہے", "Theek hai"),
+      L("Good", "اچھا", "Acha"), L("Excellent", "بہترین", "Behtareen")
+    ],
+    stars: L(n => n === 1 ? "1 star" : `${n} stars`, n => `${n} ستارے`, n => `${n} sitare`),
+    sendFailed: L("Your feedback didn't send. Check your internet and tap Send again.", "فیڈبیک نہیں بھیجا جا سکا۔ انٹرنیٹ چیک کر کے دوبارہ کوشش کریں۔", "Feedback nahi bheja ja saka. Internet check kar ke dobara koshish karein."),
+    thanksTitle: L("Shukriya!", "شکریہ!", "Shukriya!"),
+    thanksBody: L("Thank you for your feedback. We hope to serve you again soon.", "آپ کی رائے کا بہت شکریہ۔ امید ہے جلد دوبارہ آپ کی خدمت کا موقع ملے گا۔", "Aap ki raaye ka bohat shukriya. Umeed hai jald dobara aap ki khidmat ka moqa milega."),
+    reference: L("Reference", "حوالہ نمبر", "Hawala number"),
+    again: L("Give feedback on another order", "کسی اور آرڈر پر فیڈبیک دیں", "Kisi aur order par feedback dein"),
+    follow: L("Follow us on Instagram", "انسٹاگرام پر فالو کریں", "Instagram par follow karein"),
+    orderAgain: L("Order again online", "دوبارہ آن لائن آرڈر کریں", "Dobara online order karein"),
+    contactLead: L("Questions about your order? Contact us.", "آرڈر کے بارے میں کوئی سوال؟ ہم سے رابطہ کریں۔", "Order ke baare mein koi sawal? Hum se rabta karein.")
+  };
+
+  const SIX = L("Six quick questions and your name.", "چھ آسان سوال اور آپ کا نام۔", "Chhe asaan sawal aur aap ka naam.");
   const STEPS = [
-    { label: L("Visit", "برانچ"), title: L("Your order", "آپ کا آرڈر"), sub: L("Pick your branch, then tap how you got your order.", "اپنی برانچ منتخب کریں، پھر بتائیں آرڈر کیسے لیا۔") },
+    { label: L("Visit", "برانچ", "Branch"), title: L("Your order", "آپ کا آرڈر", "Aap ka order"),
+      sub: L("Pick your branch, then tap how you got your order.", "اپنی برانچ منتخب کریں، پھر بتائیں آرڈر کیسے لیا۔", "Apni branch chunein, phir batayein order kaise liya.") },
     { service: true },
-    { label: L("Optional", "اختیاری"), title: L("A few more, if you have time", "وقت ہو تو چند مزید سوال"), sub: L("All optional. Answer any you like, then tap Send.", "سب سوال اختیاری ہیں۔ جتنے چاہیں جواب دیں، پھر بھیج دیں۔") }
+    { label: L("Optional", "اختیاری", "Ikhtiyari"), title: L("A few more, if you have time", "وقت ہو تو چند مزید سوال", "Waqt ho to chand mazeed sawal"),
+      sub: L("All optional. Answer any you like, then tap Send.", "سب سوال اختیاری ہیں۔ جتنے چاہیں جواب دیں، پھر بھیج دیں۔", "Sab sawal ikhtiyari hain. Jitne chahein jawab dein, phir bhej dein.") }
   ];
   const SERVICE_STEP = {
-    dine_in: { label: L("Dine-in", "ڈائن اِن"), title: L("Your visit", "ریسٹورنٹ کا تجربہ"), sub: SIX },
-    delivery: { label: L("Delivery", "ڈیلیوری"), title: L("Your delivery", "ڈیلیوری کا تجربہ"), sub: SIX },
-    takeaway: { label: L("Takeaway", "ٹیک اوے"), title: L("Your pickup", "ٹیک اوے کا تجربہ"), sub: SIX },
-    none: { label: L("Review", "رائے"), title: L("Your experience", "آپ کا تجربہ"), sub: SIX }
+    dine_in: { label: L("Dine-in", "ڈائن اِن", "Dine-in"), title: L("Your visit", "ریسٹورنٹ کا تجربہ", "Restaurant ka tajurba"), sub: SIX },
+    delivery: { label: L("Delivery", "ڈیلیوری", "Delivery"), title: L("Your delivery", "ڈیلیوری کا تجربہ", "Delivery ka tajurba"), sub: SIX },
+    takeaway: { label: L("Takeaway", "ٹیک اوے", "Takeaway"), title: L("Your pickup", "ٹیک اوے کا تجربہ", "Takeaway ka tajurba"), sub: SIX },
+    none: { label: L("Review", "رائے", "Raaye"), title: L("Your experience", "آپ کا تجربہ", "Aap ka tajurba"), sub: SIX }
   };
 
   const byKey = Object.fromEntries(QUESTIONS.map(q => [q.key, q]));
@@ -64,9 +77,10 @@
   const app = $("app"), form = $("form"), list = $("questions"), formMsg = $("form-msg");
   const submitBtn = $("submit"), sendNowBtn = $("send-now"), backBtn = $("back"), thanks = $("thanks"), intro = $("intro");
 
+  // Nothing is shown in a language until the customer picks one on the first screen.
   let lang = "en";
-  try { if (localStorage.getItem("syp-feedback-lang") === "ur") lang = "ur"; } catch (_) { /* storage unavailable */ }
-  const tr = x => x[lang];
+  let langChosen = false;
+  const tr = x => x[lang] ?? x.en;
 
   let answers, text, current;
   reset();
@@ -75,6 +89,8 @@
     answers = {};
     text = {};
     current = 0;
+    lang = "en";
+    langChosen = false;
     branchFromHash();
   }
   function branchFromHash() {
@@ -188,11 +204,11 @@
   }
 
   function render() {
-    app.lang = lang;
-    app.dir = lang === "ur" ? "rtl" : "ltr";
-    document.documentElement.lang = lang;
-    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === lang)));
+    app.lang = LANGS[lang].tag;
+    app.dir = LANGS[lang].dir;
+    document.documentElement.lang = LANGS[lang].tag;
     document.querySelectorAll("[data-t]").forEach(el => { el.textContent = tr(UI[el.dataset.t]); });
+    $("lang-current").textContent = LANGS[lang].name;
 
     list.innerHTML = QUESTIONS.map(questionHTML).join("");
     QUESTIONS.forEach(checkSaved);
@@ -200,6 +216,16 @@
     $("q-favorite").dataset.sig = optionsOf(byKey.favorite).map(x => x.value).join(",");
     formMsg.hidden = true;
     sync();
+    applyView();
+  }
+
+  // Language screen first; the form once a language is picked; the thank-you screen after sending.
+  function applyView() {
+    const done = !thanks.hidden;
+    $("lang-view").hidden = langChosen || done;
+    form.hidden = !langChosen || done;
+    intro.hidden = !langChosen || done;
+    $("lang-change").hidden = !langChosen || done;
   }
 
   // The favourite question only offers the dishes the customer ordered.
@@ -359,12 +385,21 @@
     if (isAnswered(contact) && (!(text.phone || "").trim() || validPhone(text.phone))) showError(contact, "");
   });
 
-  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
-    if (b.dataset.lang === lang) return;
-    lang = b.dataset.lang;
-    try { localStorage.setItem("syp-feedback-lang", lang); } catch (_) { /* storage unavailable */ }
+  document.querySelectorAll("[data-pick]").forEach(b => b.addEventListener("click", () => {
+    lang = b.dataset.pick;
+    langChosen = true;
     render();
+    $("panel").scrollIntoView({ behavior: smooth(), block: "start" });
+    $("step-title").focus({ preventScroll: true });
   }));
+
+  // Back to the language screen; answers so far are kept.
+  $("lang-change").addEventListener("click", () => {
+    langChosen = false;
+    applyView();
+    window.scrollTo(0, 0);
+    document.querySelector(`[data-pick="${lang}"]`).focus();
+  });
 
   window.addEventListener("hashchange", () => {
     branchFromHash();
@@ -415,9 +450,8 @@
       const reference = await send(buildPayload());
       $("thanks-code").textContent = reference || "";
       $("thanks-ref").hidden = !reference;
-      form.hidden = true;
-      intro.hidden = true;
       thanks.hidden = false;
+      applyView();
       window.scrollTo(0, 0);
       $("thanks-title").focus();
     } catch (err) {
@@ -446,8 +480,6 @@
     reset();
     $("website").value = "";
     thanks.hidden = true;
-    intro.hidden = false;
-    form.hidden = false;
     render();
     window.scrollTo(0, 0);
   });

@@ -442,7 +442,7 @@
     body.append(h("div", { class: "chips" },
       h("span", { class: "chip plain" }, r.branch_name),
       h("span", { class: "chip plain" }, r.service_name),
-      h("span", { class: "chip plain" }, r.language === "ur" ? "Filled in Urdu" : "Filled in English"),
+      h("span", { class: "chip plain" }, `Filled in ${{ ur: "Urdu", roman: "Roman Urdu" }[r.language] || "English"}`),
       h("span", { class: "chip plain" }, "Food ", stars(r.food_rating)),
     ));
 

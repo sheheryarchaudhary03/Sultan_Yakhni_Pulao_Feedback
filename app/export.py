@@ -15,6 +15,7 @@ HEADER_FONT = Font(bold=True, color="FFFFFF")
 HEADER_FILL = PatternFill("solid", fgColor=GREEN)
 STATUS_LABELS = {"new": "New", "reviewed": "Reviewed", "actioned": "Actioned", "archived": "Archived"}
 RETURN_LABELS = {"yes": "Yes", "maybe": "Maybe", "no": "No"}
+LANGUAGE_LABELS = {"en": "English", "ur": "Urdu", "roman": "Roman Urdu"}
 
 
 def _header(ws, row: int = 1) -> None:
@@ -51,7 +52,7 @@ def build_workbook(rows: list[dict], stats: dict, filters_label: str) -> bytes:
             v = answers.get(q["key"])
             line.append(v if q["kind"] == "stars" else (catalogue.label(q, v) or None))
         line += [r["other_item"], r["comments"], "Yes" if r["wants_offers"] else "No",
-                 r["customer_name"], r["customer_phone"], "Urdu" if r["language"] == "ur" else "English",
+                 r["customer_name"], r["customer_phone"], LANGUAGE_LABELS.get(r["language"], r["language"]),
                  r["admin_note"]]
         ws.append(line)
         # openpyxl treats any string starting with "=" as a formula; keep typed text as text.

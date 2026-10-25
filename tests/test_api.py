@@ -33,6 +33,14 @@ def test_submit_dine_in(client):
     assert re.fullmatch(r"SYP-\d{6}-[A-Z0-9]{5}", r.json()["reference"])
 
 
+def test_languages(client):
+    for code in ("en", "ur", "roman"):
+        r = client.post("/api/feedback", json={"language": code, "answers": DINE_IN, "name": "Test customer"})
+        assert r.status_code == 201, (code, r.text)
+    r = client.post("/api/feedback", json={"language": "fr", "answers": DINE_IN, "name": "Test customer"})
+    assert r.status_code == 422
+
+
 def test_missing_required_answer_is_refused(client):
     answers = {k: v for k, v in DINE_IN.items() if k != "cleanliness"}
     r = submit(client, answers)

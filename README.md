@@ -11,6 +11,10 @@ up on complaints, and export everything to Excel.
 
 ## The form
 
+The first screen asks for a language: **English**, **اردو** (Urdu script) or **Roman Urdu**.
+The whole form then shows in that language; **Change** at the top goes back to this screen
+without losing answers. Every label lives in `questions.json` as `en`, `ur` and `roman`.
+
 1. **Visit:** branch and order type (dine-in, takeaway or delivery). Tapping the order
    type moves straight to the next page.
 2. **Review:** six required questions for that order type, then the customer's name
@@ -32,6 +36,9 @@ Add `#<branch id>` to the form link to preselect a branch:
 | SYP Daska | `#daska` |
 | SYP Akbarabad | `#akbarabad` |
 | Sultan Johar Town | `#johar-town` |
+
+Ready-made QR codes are in `qr-codes/`: a PNG for every link above (`-main` is the general
+one) and `sultan-feedback-qr-cards.pdf`, two A4 sheets of A6 table cards to print and cut.
 
 ### Changing questions, options or branches
 
