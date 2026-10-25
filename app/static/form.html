@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sultan Yakhni Pulao Feedback</title>
+<link rel="icon" type="image/webp" href="/static/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400;600&family=Rozha+One&display=swap">
+<style>
+/* Layout: one narrow column. An arched, Mughal-doorway header crowns a three-step form
+   (branch, six required questions, optional extras); Back / Send / Next stick to the bottom. */
+:root {
+  --bg: #F1F4EF;
+  --surface: #FFFFFF;
+  --sunken: #F5F8F4;
+  --ink: #17221D;
+  --muted: #56665D;
+  --line: #D8E1D9;
+  --brand: #1C5841;
+  --brand-hover: #174A37;
+  --brand-text: #1C5841;
+  --brand-soft: #E4EEE8;
+  --on-brand: #FFFFFF;
+  --on-brand-soft: rgba(255, 255, 255, .8);
+  --on-brand-line: rgba(255, 255, 255, .16);
+  --gold: #F2C24F;
+  --gold-line: rgba(242, 194, 79, .45);
+  --medallion: #FFFFFF;    /* the logo sits on white in both themes */
+  --star: #E0A21B;
+  --star-empty: #CBD5CD;
+  --danger: #B3261E;
+  --danger-soft: #FCEBE9;
+  --shadow: 0 1px 2px rgba(23, 34, 29, .06), 0 10px 28px rgba(23, 34, 29, .08);
+
+  --font-display: "Rozha One", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1612;
+    --surface: #15211B;
+    --sunken: #111B16;
+    --ink: #E6ECE7;
+    --muted: #9BADA2;
+    --line: #2A3B32;
+    --brand: #1F6249;
+    --brand-hover: #247055;
+    --brand-text: #84CFA8;
+    --brand-soft: #1A3127;
+    --star: #F2B53A;
+    --star-empty: #3A4D43;
+    --danger: #F28B82;
+    --danger-soft: #3A1F1C;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1612;
+  --surface: #15211B;
+  --sunken: #111B16;
+  --ink: #E6ECE7;
+  --muted: #9BADA2;
+  --line: #2A3B32;
+  --brand: #1F6249;
+  --brand-hover: #247055;
+  --brand-text: #84CFA8;
+  --brand-soft: #1A3127;
+  --star: #F2B53A;
+  --star-empty: #3A4D43;
+  --danger: #F28B82;
+  --danger-soft: #3A1F1C;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px rgba(0, 0, 0, .35);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 1rem/1.5 var(--font-body);
+  padding-inline: 16px;
+  padding-block: max(1rem, env(safe-area-inset-top, 0px)) 0;
+}
+button, input, textarea, select { font: inherit; color: inherit; }
+.shell { max-width: 34rem; margin-inline: auto; padding-bottom: 1.5rem; }
+
+/* Language switch */
+.topbar { display: flex; justify-content: flex-end; margin-bottom: .75rem; }
+.lang { display: inline-flex; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.lang button {
+  border: 0; background: none; border-radius: 999px; cursor: pointer;
+  padding: 0 .95rem; min-height: 2.1rem; font-size: .875rem; font-weight: 600; color: var(--muted);
+}
+.lang button[lang="ur"] { font-family: var(--font-urdu); font-weight: 400; font-size: .95rem; }
+.lang button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.lang button:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Arched header */
+.arch {
+  position: relative;
+  text-align: center;
+  color: var(--on-brand);
+  background-color: var(--brand);
+  background-image: radial-gradient(var(--on-brand-line) 1px, transparent 1.6px);
+  background-size: 14px 14px;
+  border-radius: 50% 50% 0 0 / 7rem 7rem 0 0;
+  padding: 2.6rem 1.5rem 1.6rem;
+}
+.arch::before {
+  content: "";
+  position: absolute;
+  inset: .55rem .55rem 0;
+  border: 1px solid var(--gold-line);
+  border-bottom: 0;
+  border-radius: 50% 50% 0 0 / 6.5rem 6.5rem 0 0;
+  pointer-events: none;
+}
+.medallion {
+  position: relative; display: grid; place-items: center;
+  width: 6.5rem; height: 6.5rem; margin: 0 auto;
+  border-radius: 50%; background: var(--medallion);
+  box-shadow: 0 0 0 3px var(--brand), 0 0 0 4.5px var(--gold), 0 8px 20px rgba(0, 0, 0, .28);
+}
+.medallion img { display: block; width: 86%; height: auto; }
+.eyebrow {
+  margin: 1rem 0 .2rem; color: var(--on-brand-soft);
+  font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+}
+.brand { margin: 0; font: 400 clamp(2rem, 8vw, 2.75rem)/1.05 var(--font-display); color: var(--gold); text-wrap: balance; }
+.slogan { max-width: 22rem; margin: .4rem auto 0; font: 400 1.1rem/2.2 var(--font-urdu); color: var(--on-brand-soft); text-wrap: balance; }
+.intro { margin-top: 1rem; padding-top: 1.1rem; border-top: 1px solid var(--on-brand-line); }
+.intro-title { margin: 0; font-size: 1.3rem; font-weight: 700; line-height: 1.3; text-wrap: balance; }
+.intro-lede { margin: .25rem 0 0; color: var(--on-brand-soft); font-size: .95rem; }
+
+/* Panel, step progress and step heading */
+.panel { background: var(--surface); border-radius: 0 0 1.25rem 1.25rem; box-shadow: var(--shadow); scroll-margin-top: 1rem; }
+.steps {
+  list-style: none; margin: 0; padding: 1.1rem 1.5rem 0;
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .4rem;
+}
+.steps li { display: grid; gap: .35rem; min-width: 0; }
+.seg { height: .3rem; border-radius: 99px; background: var(--line); transition: background-color .25s; }
+.steps li.done .seg { background: var(--brand-text); }
+.steps li.current .seg { background: var(--star); }
+.step-label { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: .75rem; font-weight: 600; color: var(--muted); }
+.steps li.current .step-label { color: var(--ink); }
+.step-head { padding: 1.1rem 1.5rem 1.2rem; }
+.step-kicker { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-text); }
+.step-title { margin: .15rem 0 0; font: 400 1.75rem/1.15 var(--font-display); color: var(--ink); }
+.step-title:focus { outline: none; }
+.step-sub { margin: .25rem 0 0; font-size: .95rem; color: var(--muted); }
+
+/* Section bands inside the optional step */
+.group-head { padding: .7rem 1.5rem; border-top: 1px solid var(--line); background: var(--sunken); }
+.group-head h3 { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brand-text); }
+
+/* Questions */
+.q { padding: 1.3rem 1.5rem; border-top: 1px solid var(--line); }
+.q-head { display: flex; gap: .7rem; align-items: flex-start; }
+.q-num {
+  flex: none; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; margin-top: .05rem;
+  border-radius: 50%; background: var(--brand-soft); color: var(--brand-text);
+  font: 700 .8rem/1 var(--font-body); font-variant-numeric: tabular-nums;
+}
+.q-title { margin: 0; font-size: 1.0625rem; font-weight: 600; line-height: 1.4; text-wrap: balance; }
+.q-hint { margin: .15rem 0 0; font-size: .9rem; color: var(--muted); }
+.q-body { margin-top: .9rem; }
+.q-error { margin: .75rem 0 0; color: var(--danger); font-size: .9rem; font-weight: 600; }
+.q.invalid .q-num { background: var(--danger); color: var(--surface); }
+
+.star input, .choice input, .pill input {
+  position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer;
+}
+
+/* Branch dropdown */
+.select { position: relative; }
+.select select {
+  appearance: none; -webkit-appearance: none; display: block; width: 100%; min-height: 3rem; cursor: pointer;
+  padding-block: .6rem; padding-inline: .9rem 2.75rem;
+  border: 1.5px solid var(--line); border-radius: .8rem; background: var(--surface); color: var(--ink);
+  font-size: 1rem; font-weight: 600;
+}
+.select::after {
+  content: ""; position: absolute; inset-inline-end: 1.1rem; top: 50%; width: .55rem; height: .55rem;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+  transform: translateY(-70%) rotate(45deg); pointer-events: none;
+}
+.select select:focus { outline: none; border-color: var(--brand-text); box-shadow: 0 0 0 3px var(--brand-soft); }
+
+/* Star rating */
+.stars { display: flex; gap: .4rem; }
+.star { position: relative; display: block; }
+.star svg {
+  display: block; width: clamp(2.25rem, 11vw, 2.75rem); height: clamp(2.25rem, 11vw, 2.75rem);
+  fill: var(--star-empty); transition: fill .15s, transform .15s;
+}
+.star.on svg { fill: var(--star); }
+.star:active svg { transform: scale(.9); }
+.star input:focus-visible + svg { outline: 2px solid var(--brand-text); outline-offset: 2px; border-radius: .4rem; }
+.star-caption { min-height: 1.5em; margin: .35rem 0 0; font-weight: 600; color: var(--muted); }
+
+/* Service type cards */
+.choices { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; }
+.choice { position: relative; display: flex; }
+.choice span {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .35rem;
+  min-height: 3rem; padding: .7rem .5rem; text-align: center;
+  border: 1.5px solid var(--line); border-radius: .85rem; background: var(--surface);
+  font-size: .95rem; font-weight: 600; line-height: 1.25;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.choice svg {
+  width: 1.6rem; height: 1.6rem; fill: none; stroke: currentColor; stroke-width: 1.6;
+  stroke-linecap: round; stroke-linejoin: round; color: var(--brand-text);
+}
+.choice input:checked + span { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.choice input:checked + span svg { color: var(--gold); }
+
+/* One-tap answers */
+.pills { display: flex; flex-wrap: wrap; gap: .45rem; }
+.pill { position: relative; display: flex; }
+.pill span {
+  display: flex; align-items: center; gap: .35rem; min-height: 2.6rem; padding: .4rem .95rem;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface);
+  font-size: .95rem; font-weight: 500; line-height: 1.3;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+.pill input:checked + span { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.pill input[type="checkbox"]:checked + span::before { content: "\2713"; font-weight: 700; }
+
+.choice input:focus-visible + span, .pill input:focus-visible + span { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+@media (hover: hover) {
+  .choice:hover input:not(:checked) + span, .pill:hover input:not(:checked) + span { border-color: var(--brand-text); }
+}
+
+/* Text fields */
+textarea, .field input {
+  display: block; width: 100%; padding: .7rem .85rem;
+  border: 1.5px solid var(--line); border-radius: .8rem; background: var(--surface); color: var(--ink);
+  font-size: 1rem;
+}
+textarea { min-height: 6rem; resize: vertical; line-height: 1.5; }
+textarea::placeholder, input::placeholder { color: var(--muted); opacity: .85; }
+textarea:focus, .field input:focus { outline: none; border-color: var(--brand-text); box-shadow: 0 0 0 3px var(--brand-soft); }
+.extra { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .9rem; }
+.extra.single { grid-template-columns: 1fr; }
+.field { display: grid; gap: .3rem; min-width: 0; }
+.field label { font-size: .875rem; font-weight: 600; color: var(--muted); }
+
+/* Back / Send now / Next bar */
+.bar {
+  position: sticky; bottom: 0; z-index: 5;
+  padding-block: 1.25rem calc(1rem + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, var(--bg) 72%, transparent);
+}
+.bar-msg {
+  margin: 0 0 .6rem; padding: .6rem .85rem; border-radius: .7rem;
+  background: var(--danger-soft); color: var(--danger); font-size: .9rem; font-weight: 600;
+}
+.bar-inner { display: flex; align-items: center; gap: .6rem; }
+.bar-spacer { flex: 1; }
+.submit {
+  flex: none; min-height: 3rem; padding-inline: 1.6rem; cursor: pointer;
+  border: 0; border-radius: 999px; background: var(--brand); color: var(--on-brand);
+  font-weight: 700; box-shadow: var(--shadow);
+}
+.submit:hover { background: var(--brand-hover); }
+.submit:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 3px; }
+.submit:disabled, .ghost:disabled { opacity: .7; cursor: progress; }
+.ghost {
+  flex: none; min-height: 3rem; padding: 0 1.2rem; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-weight: 600;
+}
+.ghost:hover { border-color: var(--brand-text); }
+.ghost:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Thank-you */
+.thanks { padding: 2.5rem 1.5rem 2rem; text-align: center; }
+.thanks-mark {
+  display: grid; place-items: center; width: 3.5rem; height: 3.5rem; margin: 0 auto 1rem;
+  border-radius: 50%; background: var(--brand-soft); color: var(--brand-text);
+}
+.thanks-mark svg { width: 1.75rem; height: 1.75rem; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.thanks-title { margin: 0; font: 400 2.25rem/1.15 var(--font-display); color: var(--brand-text); }
+.thanks-title:focus { outline: none; }
+.thanks p { max-width: 26rem; margin: .6rem auto 1.5rem; color: var(--muted); }
+.thanks .ghost { min-height: 2.75rem; }
+.thanks p.thanks-ref { margin-top: -.75rem; font-size: .85rem; }
+.thanks-ref span[dir] { font: 600 .9rem/1 var(--font-body); color: var(--ink); letter-spacing: .04em; }
+.trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.thanks-links { display: grid; gap: .6rem; max-width: 20rem; margin: 0 auto 1.25rem; }
+.cta {
+  display: flex; align-items: center; justify-content: center; gap: .5rem; min-height: 3rem; padding: 0 1.2rem;
+  border: 1.5px solid var(--brand); border-radius: 999px; background: var(--brand); color: var(--on-brand);
+  font-weight: 700; text-decoration: none;
+}
+.cta:hover { background: var(--brand-hover); }
+.cta.alt { border-color: var(--line); background: var(--surface); color: var(--brand-text); }
+.cta.alt:hover { border-color: var(--brand-text); }
+.cta:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+
+/* Contact strip */
+.contact { margin-top: 2rem; text-align: center; font-size: .9rem; color: var(--muted); }
+.contact p { margin: 0 0 .65rem; }
+.contact ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; }
+.contact a {
+  display: inline-flex; align-items: center; gap: .45rem; min-height: 2.5rem; padding: 0 .95rem;
+  border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+  color: var(--brand-text); font-weight: 600; text-decoration: none;
+}
+.contact a:hover { border-color: var(--brand-text); }
+.contact a:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+.ico { flex: none; width: 1.1rem; height: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* Urdu: Nastaliq needs taller lines and no letter-spacing */
+#app[lang="ur"] { font-family: var(--font-urdu); line-height: 2.1; }
+#app[lang="ur"] .eyebrow { letter-spacing: 0; text-transform: none; font-size: .85rem; line-height: 2; }
+#app[lang="ur"] .intro-title { font-weight: 600; font-size: 1.3rem; line-height: 2.2; }
+#app[lang="ur"] .intro-lede { line-height: 2; }
+#app[lang="ur"] .step-label { font-weight: 400; line-height: 2; }
+#app[lang="ur"] .step-kicker, #app[lang="ur"] .group-head h3 { letter-spacing: 0; text-transform: none; font-weight: 400; font-size: .85rem; line-height: 2; }
+#app[lang="ur"] .step-title { font-family: var(--font-urdu); font-size: 1.45rem; line-height: 2.3; }
+#app[lang="ur"] .step-sub, #app[lang="ur"] .q-hint { line-height: 2; }
+#app[lang="ur"] .q-title { font-size: 1rem; line-height: 2.2; }
+#app[lang="ur"] .q-head { align-items: center; }
+#app[lang="ur"] .choice span, #app[lang="ur"] .pill span { font-weight: 400; line-height: 2; padding-block: .2rem; }
+#app[lang="ur"] .pill span { font-size: .9rem; }
+#app[lang="ur"] .star-caption { line-height: 2.2; }
+#app[lang="ur"] textarea { line-height: 2.2; }
+#app[lang="ur"] .submit, #app[lang="ur"] .ghost { font-weight: 600; line-height: 2; }
+#app[lang="ur"] .thanks-title { font-family: var(--font-urdu); font-size: 2rem; line-height: 2.4; }
+#app[lang="ur"] .cta { font-weight: 600; line-height: 2; }
+#app[lang="ur"] .contact p { line-height: 2; }
+#app[lang="ur"] .contact a { font-family: var(--font-body); }
+
+@media (max-width: 380px) {
+  .q, .step-head, .group-head { padding-inline: 1.15rem; }
+  .steps { padding-inline: 1.15rem; }
+  .extra { grid-template-columns: 1fr; }
+  .submit { padding-inline: 1.2rem; }
+  .ghost { padding-inline: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+</style>
+</head>
+<body>
+<div class="shell" id="app" lang="en" dir="ltr">
+  <div class="topbar">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" id="lang-en" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" id="lang-ur" data-lang="ur" aria-pressed="false" lang="ur">اردو</button>
+    </div>
+  </div>
+
+  <header class="arch">
+    <div class="medallion"><img src="/static/logo.webp" width="150" height="150" alt=""></div>
+    <p class="eyebrow" data-t="eyebrow">Customer feedback</p>
+    <h1 class="brand">Sultan Yakhni Pulao</h1>
+    <p class="slogan" lang="ur" dir="rtl">یہاں ذائقہ مسکرائے، وہاں سلطان یاد آئے</p>
+    <div class="intro" id="intro">
+      <h2 class="intro-title" data-t="title">How was your meal today?</h2>
+      <p class="intro-lede" data-t="lede">Under a minute. The extra questions at the end are optional.</p>
+    </div>
+  </header>
+
+  <form id="form" novalidate>
+    <div class="panel" id="panel">
+      <ol class="steps" id="steps">
+        <li><span class="seg"></span><span class="step-label"></span></li>
+        <li><span class="seg"></span><span class="step-label"></span></li>
+        <li><span class="seg"></span><span class="step-label"></span></li>
+      </ol>
+      <div class="step-head">
+        <p class="step-kicker" id="step-kicker"></p>
+        <h2 class="step-title" id="step-title" tabindex="-1"></h2>
+        <p class="step-sub" id="step-sub"></p>
+      </div>
+      <div id="questions"></div>
+      <div class="trap" aria-hidden="true">
+        <label for="website">Leave this empty</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="bar">
+      <p class="bar-msg" id="form-msg" role="alert" hidden></p>
+      <div class="bar-inner">
+        <button class="ghost" type="button" id="back" data-t="back" hidden>Back</button>
+        <span class="bar-spacer"></span>
+        <button class="ghost" type="button" id="send-now" data-t="sendNow" hidden>Send now</button>
+        <button class="submit" type="submit" id="submit">Next</button>
+      </div>
+    </div>
+  </form>
+
+  <section class="panel thanks" id="thanks" hidden>
+    <div class="thanks-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="5 12.5 10 17.5 19 7"/></svg></div>
+    <h2 class="thanks-title" id="thanks-title" tabindex="-1" data-t="thanksTitle">Shukriya!</h2>
+    <p data-t="thanksBody">Thank you for your feedback. We hope to serve you again soon.</p>
+    <p class="thanks-ref" id="thanks-ref" hidden><span data-t="reference">Reference</span> <span id="thanks-code" dir="ltr"></span></p>
+    <div class="thanks-links">
+      <a class="cta" href="https://www.instagram.com/sultanyakhnipulao/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span data-t="follow">Follow us on Instagram</span>
+      </a>
+      <a class="cta alt" href="https://sultanpulao.com" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <span data-t="orderAgain">Order again online</span>
+      </a>
+    </div>
+    <button type="button" class="ghost" id="again" data-t="again">Give feedback on another order</button>
+  </section>
+
+  <footer class="contact">
+    <p data-t="contactLead">Questions about your order? Contact us.</p>
+    <ul>
+      <li><a href="tel:+923210133232">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h3l2 5-2.5 1.5a11 11 0 0 0 6 6L15 14l5 2v3a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+        <span dir="ltr">+92 321 0133232</span></a></li>
+      <li><a href="https://wa.me/923210133232" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.2 18.6z"/><path d="M9 10.5h6M9 13.5h4"/></svg>
+        <span dir="ltr">WhatsApp</span></a></li>
+      <li><a href="https://sultanpulao.com" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+        <span dir="ltr">sultanpulao.com</span></a></li>
+      <li><a href="https://www.instagram.com/sultanyakhnipulao/" target="_blank" rel="noopener">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        <span dir="ltr">@sultanyakhnipulao</span></a></li>
+    </ul>
+  </footer>
+</div>
+
+<script type="application/json" id="catalogue">{{CATALOGUE}}</script>
+<script src="/static/form.js" defer></script>
+</body>
+</html>

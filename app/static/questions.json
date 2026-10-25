@@ -1,0 +1,322 @@
+{
+  "_about": "Single source for the form and the server. Steps: 0 visit (required), 1 review (required), 2 optional. Option values are stored; labels are only for display. Rename a label freely; never reuse a value for a different meaning.",
+
+  "branches": [
+    { "id": "paka-garah", "name": "SYP Paka Garah, Kashmir Rd." },
+    { "id": "kashmir-park", "name": "SYP Kashmir Park" },
+    { "id": "daska", "name": "SYP Daska" },
+    { "id": "akbarabad", "name": "SYP Akbarabad" },
+    { "id": "johar-town", "name": "Sultan Johar Town" }
+  ],
+
+  "optionSets": {
+    "services": [
+      { "value": "dine_in", "en": "Dine-in", "ur": "ریسٹورنٹ میں کھایا" },
+      { "value": "takeaway", "en": "Takeaway", "ur": "ٹیک اوے" },
+      { "value": "delivery", "en": "Delivery", "ur": "ہوم ڈیلیوری" }
+    ],
+    "menu": [
+      { "value": "chicken_pulao", "en": "Chicken Yakhni Pulao", "ur": "چکن یخنی پلاؤ" },
+      { "value": "beef_pulao", "en": "Beef Yakhni Pulao", "ur": "بیف یخنی پلاؤ" },
+      { "value": "chicken_biryani", "en": "Chicken Biryani", "ur": "چکن بریانی" },
+      { "value": "beef_biryani", "en": "Beef Biryani", "ur": "بیف بریانی" },
+      { "value": "chapli", "en": "Chapli Kabab", "ur": "چپلی کباب" },
+      { "value": "shami", "en": "Shami Kabab", "ur": "شامی کباب" },
+      { "value": "mocktail", "en": "Mocktail", "ur": "موکٹیل" },
+      { "value": "other", "en": "Other", "ur": "کچھ اور" }
+    ],
+    "quality": [
+      { "value": "excellent", "en": "Excellent", "ur": "بہترین" },
+      { "value": "very_good", "en": "Very good", "ur": "بہت اچھا" },
+      { "value": "good", "en": "Good", "ur": "اچھا" },
+      { "value": "average", "en": "Average", "ur": "درمیانہ" },
+      { "value": "needs_improvement", "en": "Needs improvement", "ur": "بہتری کی ضرورت ہے" }
+    ],
+    "again": [
+      { "value": "definitely", "en": "Definitely", "ur": "ضرور" },
+      { "value": "maybe", "en": "Maybe", "ur": "شاید" },
+      { "value": "no", "en": "No", "ur": "نہیں" }
+    ]
+  },
+
+  "questions": [
+    { "key": "branch", "step": 0, "kind": "select", "required": true,
+      "title": { "en": "Which branch did you order from?", "ur": "آپ نے کس برانچ سے آرڈر کیا؟" } },
+    { "key": "service", "step": 0, "kind": "cards", "required": true, "options": "@services",
+      "title": { "en": "How did you get your order?", "ur": "آپ نے آرڈر کیسے لیا؟" } },
+
+    { "key": "food", "step": 1, "kind": "stars", "required": true,
+      "title": { "en": "How was the food?", "ur": "کھانا کیسا تھا؟" },
+      "hint": { "en": "Taste, freshness and quantity", "ur": "ذائقہ، تازگی اور مقدار" } },
+
+    { "key": "staff_welcome", "step": 1, "kind": "stars", "required": true, "when": { "service": ["dine_in"] },
+      "title": { "en": "How welcoming was our staff?", "ur": "ہمارے عملے نے آپ کا استقبال کیسے کیا؟" } },
+    { "key": "food_time", "step": 1, "kind": "choice", "required": true, "when": { "service": ["dine_in"] },
+      "title": { "en": "How long did your food take?", "ur": "کھانا آنے میں کتنا وقت لگا؟" },
+      "options": [
+        { "value": "under_10", "en": "Less than 10 minutes", "ur": "10 منٹ سے کم" },
+        { "value": "10_20", "en": "10–20 minutes", "ur": "10 سے 20 منٹ" },
+        { "value": "20_30", "en": "20–30 minutes", "ur": "20 سے 30 منٹ" },
+        { "value": "over_30", "en": "More than 30 minutes", "ur": "30 منٹ سے زیادہ" }
+      ] },
+    { "key": "cleanliness", "step": 1, "kind": "stars", "required": true, "when": { "service": ["dine_in"] },
+      "title": { "en": "How was the restaurant's cleanliness?", "ur": "ریسٹورنٹ کی صفائی کیسی تھی؟" } },
+    { "key": "ambiance", "step": 1, "kind": "choice", "required": true, "when": { "service": ["dine_in"] },
+      "title": { "en": "How was the ambiance?", "ur": "ماحول کیسا تھا؟" },
+      "options": [
+        { "value": "excellent", "en": "Excellent", "ur": "بہترین" },
+        { "value": "good", "en": "Good", "ur": "اچھا" },
+        { "value": "average", "en": "Average", "ur": "درمیانہ" },
+        { "value": "needs_improvement", "en": "Needs improvement", "ur": "بہتری کی ضرورت ہے" }
+      ] },
+    { "key": "dine_again", "step": 1, "kind": "choice", "required": true, "when": { "service": ["dine_in"] },
+      "title": { "en": "Would you dine with us again?", "ur": "کیا آپ دوبارہ ہمارے ہاں کھانا کھانے آئیں گے؟" },
+      "options": [
+        { "value": "definitely", "en": "Definitely", "ur": "ضرور" },
+        { "value": "maybe", "en": "Maybe", "ur": "شاید" },
+        { "value": "probably_not", "en": "Probably not", "ur": "شاید نہیں" }
+      ] },
+
+    { "key": "on_time", "step": 1, "kind": "choice", "required": true, "when": { "service": ["delivery"] },
+      "title": { "en": "Was your order delivered on time?", "ur": "کیا آرڈر وقت پر پہنچا؟" },
+      "options": [
+        { "value": "early", "en": "Before time", "ur": "وقت سے پہلے" },
+        { "value": "on_time", "en": "On time", "ur": "وقت پر" },
+        { "value": "slightly_late", "en": "Slightly late", "ur": "تھوڑی دیر سے" },
+        { "value": "very_late", "en": "Very late", "ur": "بہت دیر سے" }
+      ] },
+    { "key": "arrived_hot", "step": 1, "kind": "choice", "required": true, "when": { "service": ["delivery"] },
+      "title": { "en": "Did your food arrive hot?", "ur": "کیا کھانا گرم پہنچا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "warm", "en": "Warm", "ur": "نیم گرم" },
+        { "value": "cold", "en": "Cold", "ur": "ٹھنڈا" }
+      ] },
+    { "key": "delivery_complete", "step": 1, "kind": "choice", "required": true, "when": { "service": ["delivery"] },
+      "title": { "en": "Was your order complete?", "ur": "کیا آپ کا آرڈر مکمل تھا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "missing_items", "en": "Missing items", "ur": "کچھ چیزیں کم تھیں" }
+      ] },
+    { "key": "rider_behaviour", "step": 1, "kind": "choice", "required": true, "when": { "service": ["delivery"] },
+      "title": { "en": "How was the rider's behaviour?", "ur": "رائیڈر کا رویہ کیسا تھا؟" },
+      "options": [
+        { "value": "excellent", "en": "Excellent", "ur": "بہترین" },
+        { "value": "friendly", "en": "Friendly", "ur": "دوستانہ" },
+        { "value": "average", "en": "Average", "ur": "درمیانہ" },
+        { "value": "poor", "en": "Poor", "ur": "خراب" }
+      ] },
+    { "key": "order_again", "step": 1, "kind": "choice", "required": true, "when": { "service": ["delivery"] }, "options": "@again",
+      "title": { "en": "Would you order from Sultan again?", "ur": "کیا آپ سلطان سے دوبارہ آرڈر کریں گے؟" } },
+
+    { "key": "greeted_politely", "step": 1, "kind": "choice", "required": true, "when": { "service": ["takeaway"] },
+      "title": { "en": "Were you greeted politely by our staff?", "ur": "کیا عملے نے آپ سے خوش اخلاقی سے بات کی؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "somewhat", "en": "Somewhat", "ur": "کسی حد تک" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "ready_on_arrival", "step": 1, "kind": "choice", "required": true, "when": { "service": ["takeaway"] },
+      "title": { "en": "Was your order ready when you arrived?", "ur": "کیا آپ کے پہنچنے پر آرڈر تیار تھا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "almost", "en": "Almost ready", "ur": "تقریباً تیار" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "takeaway_complete", "step": 1, "kind": "choice", "required": true, "when": { "service": ["takeaway"] },
+      "title": { "en": "Was your order complete?", "ur": "کیا آپ کا آرڈر مکمل تھا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "packaging_neat", "step": 1, "kind": "stars", "required": true, "when": { "service": ["takeaway"] },
+      "title": { "en": "Was the packaging neat and secure?", "ur": "کیا پیکنگ صاف اور محفوظ تھی؟" } },
+    { "key": "takeaway_again", "step": 1, "kind": "choice", "required": true, "when": { "service": ["takeaway"] }, "options": "@again",
+      "title": { "en": "Would you choose takeaway from Sultan again?", "ur": "کیا آپ دوبارہ سلطان سے ٹیک اوے لیں گے؟" } },
+
+    { "key": "g_food", "step": 2, "kind": "group",
+      "title": { "en": "More about the food", "ur": "کھانے کے بارے میں مزید" } },
+    { "key": "items", "step": 2, "kind": "multi", "options": "@menu",
+      "title": { "en": "What did you order today?", "ur": "آج آپ نے کیا آرڈر کیا؟" },
+      "hint": { "en": "Tap all that apply", "ur": "جو بھی لیا سب منتخب کریں" } },
+    { "key": "favorite", "step": 2, "kind": "choice", "options": "@ordered", "when": { "ordered_min": 2 },
+      "title": { "en": "Which item was your favourite today?", "ur": "آج آپ کو سب سے زیادہ کیا پسند آیا؟" } },
+    { "key": "pulao_rating", "step": 2, "kind": "choice", "options": "@quality", "when": { "ordered_any": ["chicken_pulao", "beef_pulao"] },
+      "title": { "en": "How was the Yakhni Pulao?", "ur": "یخنی پلاؤ کیسا تھا؟" } },
+    { "key": "biryani_rating", "step": 2, "kind": "choice", "options": "@quality", "when": { "ordered_any": ["chicken_biryani", "beef_biryani"] },
+      "title": { "en": "How was the Biryani?", "ur": "بریانی کیسی تھی؟" } },
+    { "key": "chapli_rating", "step": 2, "kind": "choice", "options": "@quality", "when": { "ordered_any": ["chapli"] },
+      "title": { "en": "How was the Chapli Kabab?", "ur": "چپلی کباب کیسا تھا؟" } },
+    { "key": "fresh", "step": 2, "kind": "choice",
+      "title": { "en": "Was the food fresh?", "ur": "کیا کھانا تازہ تھا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "mostly", "en": "Mostly", "ur": "زیادہ تر" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "temperature", "step": 2, "kind": "choice", "when": { "service": ["dine_in", "takeaway"] },
+      "title": { "en": "Was the food served at the right temperature?", "ur": "کیا کھانا مناسب گرم پیش کیا گیا؟" },
+      "options": [
+        { "value": "perfect", "en": "Perfect", "ur": "بالکل ٹھیک" },
+        { "value": "slightly_cold", "en": "Slightly cold", "ur": "تھوڑا ٹھنڈا" },
+        { "value": "cold", "en": "Cold", "ur": "ٹھنڈا" }
+      ] },
+    { "key": "spice", "step": 2, "kind": "choice",
+      "title": { "en": "How was the spice level?", "ur": "مرچ مصالحہ کیسا تھا؟" },
+      "options": [
+        { "value": "perfect", "en": "Perfect", "ur": "بالکل ٹھیک" },
+        { "value": "too_spicy", "en": "Too spicy", "ur": "بہت تیز" },
+        { "value": "not_enough", "en": "Not spicy enough", "ur": "مرچ کم تھی" }
+      ] },
+    { "key": "portion", "step": 2, "kind": "choice",
+      "title": { "en": "How was the portion size?", "ur": "مقدار کیسی تھی؟" },
+      "options": [
+        { "value": "more", "en": "More than enough", "ur": "ضرورت سے زیادہ" },
+        { "value": "right", "en": "Just right", "ur": "بالکل مناسب" },
+        { "value": "small", "en": "Too small", "ur": "بہت کم" }
+      ] },
+    { "key": "side", "step": 2, "kind": "choice",
+      "title": { "en": "Which side did you enjoy the most?", "ur": "سائیڈ میں سب سے زیادہ کیا پسند آیا؟" },
+      "options": [
+        { "value": "raita", "en": "Raita", "ur": "رائتہ" },
+        { "value": "salad", "en": "Salad", "ur": "سلاد" },
+        { "value": "shami", "en": "Shami Kabab", "ur": "شامی کباب" },
+        { "value": "chapli", "en": "Chapli Kabab", "ur": "چپلی کباب" },
+        { "value": "none", "en": "None", "ur": "کوئی نہیں" }
+      ] },
+    { "key": "prefer", "step": 2, "kind": "choice",
+      "title": { "en": "Which do you prefer?", "ur": "آپ کو کیا زیادہ پسند ہے؟" },
+      "options": [
+        { "value": "chicken_pulao", "en": "Chicken Yakhni Pulao", "ur": "چکن یخنی پلاؤ" },
+        { "value": "chicken_biryani", "en": "Chicken Biryani", "ur": "چکن بریانی" }
+      ] },
+
+    { "key": "g_service", "step": 2, "kind": "group", "when": { "service": ["dine_in", "takeaway", "delivery"] },
+      "titleByService": {
+        "dine_in": { "en": "More about your visit", "ur": "آپ کے وزٹ کے بارے میں مزید" },
+        "delivery": { "en": "More about your delivery", "ur": "ڈیلیوری کے بارے میں مزید" },
+        "takeaway": { "en": "More about your pickup", "ur": "ٹیک اوے کے بارے میں مزید" }
+      } },
+    { "key": "seated", "step": 2, "kind": "choice", "when": { "service": ["dine_in"] },
+      "title": { "en": "How quickly were you seated?", "ur": "آپ کو کتنی جلدی بٹھایا گیا؟" },
+      "options": [
+        { "value": "immediately", "en": "Immediately", "ur": "فوراً" },
+        { "value": "within_5", "en": "Within 5 minutes", "ur": "5 منٹ کے اندر" },
+        { "value": "5_10", "en": "5–10 minutes", "ur": "5 سے 10 منٹ" },
+        { "value": "over_10", "en": "More than 10 minutes", "ur": "10 منٹ سے زیادہ" }
+      ] },
+    { "key": "presentation", "step": 2, "kind": "choice", "when": { "service": ["dine_in"] },
+      "title": { "en": "How was the food presentation?", "ur": "کھانا پیش کرنے کا انداز کیسا تھا؟" },
+      "options": [
+        { "value": "excellent", "en": "Excellent", "ur": "بہترین" },
+        { "value": "good", "en": "Good", "ur": "اچھا" },
+        { "value": "average", "en": "Average", "ur": "درمیانہ" },
+        { "value": "poor", "en": "Poor", "ur": "خراب" }
+      ] },
+    { "key": "staff_check", "step": 2, "kind": "choice", "when": { "service": ["dine_in"] },
+      "title": { "en": "Did our staff check on you during your meal?", "ur": "کیا کھانے کے دوران عملے نے آپ کا حال پوچھا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "once", "en": "Once", "ur": "ایک بار" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "platform", "step": 2, "kind": "choice", "when": { "service": ["delivery"] },
+      "title": { "en": "Which platform did you order from?", "ur": "آپ نے کہاں سے آرڈر کیا؟" },
+      "options": [
+        { "value": "website", "en": "Sultan website", "ur": "سلطان ویب سائٹ" },
+        { "value": "whatsapp", "en": "WhatsApp", "ur": "واٹس ایپ" },
+        { "value": "phone", "en": "Phone call", "ur": "فون کال" },
+        { "value": "foodpanda", "en": "Foodpanda", "ur": "فوڈ پانڈا" },
+        { "value": "other", "en": "Other", "ur": "کوئی اور" }
+      ] },
+    { "key": "order_ease", "step": 2, "kind": "stars", "when": { "service": ["delivery", "takeaway"] },
+      "title": { "en": "How easy was it to place your order?", "ur": "آرڈر دینا کتنا آسان تھا؟" } },
+    { "key": "ordering_system", "step": 2, "kind": "choice", "when": { "service": ["delivery"], "answer": { "platform": ["website", "whatsapp"] } },
+      "title": { "en": "How was our ordering system (website / WhatsApp / bot)?", "ur": "ہمارا آرڈر سسٹم (ویب سائٹ / واٹس ایپ / بوٹ) کیسا لگا؟" },
+      "options": [
+        { "value": "very_easy", "en": "Very easy", "ur": "بہت آسان" },
+        { "value": "easy", "en": "Easy", "ur": "آسان" },
+        { "value": "average", "en": "Average", "ur": "درمیانہ" },
+        { "value": "difficult", "en": "Difficult", "ur": "مشکل" }
+      ] },
+    { "key": "confirmed_quickly", "step": 2, "kind": "choice", "when": { "service": ["delivery"] },
+      "title": { "en": "Was your order confirmed quickly?", "ur": "کیا آپ کا آرڈر جلدی کنفرم ہوا؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "some_time", "en": "Took some time", "ur": "کچھ وقت لگا" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "packaging_secure", "step": 2, "kind": "stars", "when": { "service": ["delivery"] },
+      "title": { "en": "Was the packaging secure?", "ur": "کیا پیکنگ محفوظ تھی؟" } },
+    { "key": "pickup_wait", "step": 2, "kind": "choice", "when": { "service": ["takeaway"] },
+      "title": { "en": "Did you have to wait?", "ur": "کیا آپ کو انتظار کرنا پڑا؟" },
+      "options": [
+        { "value": "no_wait", "en": "No wait", "ur": "کوئی انتظار نہیں" },
+        { "value": "under_5", "en": "Less than 5 minutes", "ur": "5 منٹ سے کم" },
+        { "value": "5_10", "en": "5–10 minutes", "ur": "5 سے 10 منٹ" },
+        { "value": "over_10", "en": "More than 10 minutes", "ur": "10 منٹ سے زیادہ" }
+      ] },
+    { "key": "pickup_smooth", "step": 2, "kind": "choice", "when": { "service": ["takeaway"] },
+      "title": { "en": "Was the pickup process smooth?", "ur": "آرڈر لینے کا عمل کیسا رہا؟" },
+      "options": [
+        { "value": "very_smooth", "en": "Very smooth", "ur": "بہت آسان" },
+        { "value": "smooth", "en": "Smooth", "ur": "آسان" },
+        { "value": "average", "en": "Average", "ur": "درمیانہ" },
+        { "value": "difficult", "en": "Difficult", "ur": "مشکل" }
+      ] },
+
+    { "key": "g_you", "step": 2, "kind": "group",
+      "title": { "en": "About you", "ur": "آپ کے بارے میں" } },
+    { "key": "heard_from", "step": 2, "kind": "choice",
+      "title": { "en": "How did you hear about Sultan?", "ur": "آپ کو سلطان کے بارے میں کیسے پتا چلا؟" },
+      "options": [
+        { "value": "instagram", "en": "Instagram", "ur": "انسٹاگرام" },
+        { "value": "facebook", "en": "Facebook", "ur": "فیس بک" },
+        { "value": "tiktok", "en": "TikTok", "ur": "ٹک ٹاک" },
+        { "value": "google", "en": "Google", "ur": "گوگل" },
+        { "value": "friends", "en": "Friend or family", "ur": "دوست یا گھر والے" },
+        { "value": "walk_in", "en": "Walk-in", "ur": "خود ریسٹورنٹ آئے" },
+        { "value": "foodpanda", "en": "Foodpanda", "ur": "فوڈ پانڈا" },
+        { "value": "passing_by", "en": "Passing by", "ur": "پاس سے گزرتے ہوئے دیکھا" }
+      ] },
+    { "key": "visit_frequency", "step": 2, "kind": "choice",
+      "title": { "en": "How often do you visit Sultan?", "ur": "آپ کتنی بار سلطان آتے ہیں؟" },
+      "options": [
+        { "value": "first_time", "en": "First time", "ur": "پہلی بار" },
+        { "value": "weekly", "en": "Weekly", "ur": "ہر ہفتے" },
+        { "value": "monthly", "en": "Monthly", "ur": "ہر مہینے" },
+        { "value": "occasionally", "en": "Occasionally", "ur": "کبھی کبھار" },
+        { "value": "regular", "en": "Regular customer", "ur": "مستقل گاہک" }
+      ] },
+    { "key": "improve_most", "step": 2, "kind": "choice",
+      "title": { "en": "What should we improve the most?", "ur": "ہمیں سب سے زیادہ کس چیز میں بہتری لانی چاہیے؟" },
+      "options": [
+        { "value": "taste", "en": "Taste", "ur": "ذائقہ" },
+        { "value": "service", "en": "Service", "ur": "سروس" },
+        { "value": "waiting", "en": "Waiting time", "ur": "انتظار کا وقت" },
+        { "value": "ambiance", "en": "Ambiance", "ur": "ماحول" },
+        { "value": "packaging", "en": "Packaging", "ur": "پیکنگ" },
+        { "value": "pricing", "en": "Pricing", "ur": "قیمت" },
+        { "value": "delivery_speed", "en": "Delivery speed", "ur": "ڈیلیوری کی رفتار" }
+      ] },
+    { "key": "menu_wishes", "step": 2, "kind": "multi",
+      "title": { "en": "What would you like added to our menu?", "ur": "آپ ہمارے مینیو میں کیا شامل دیکھنا چاہیں گے؟" },
+      "hint": { "en": "Tap any", "ur": "جو چاہیں منتخب کریں" },
+      "options": [
+        { "value": "bbq", "en": "More BBQ", "ur": "مزید باربی کیو" },
+        { "value": "rice", "en": "More rice options", "ur": "چاولوں کی مزید اقسام" },
+        { "value": "desserts", "en": "Desserts", "ur": "میٹھا" },
+        { "value": "beverages", "en": "Beverages", "ur": "مشروبات" },
+        { "value": "family_deals", "en": "Family deals", "ur": "فیملی ڈیلز" },
+        { "value": "kids_meals", "en": "Kids meals", "ur": "بچوں کے کھانے" }
+      ] },
+    { "key": "offers", "step": 2, "kind": "choice",
+      "title": { "en": "Would you like to receive special offers and discounts?", "ur": "کیا آپ خصوصی آفرز اور ڈسکاؤنٹس حاصل کرنا چاہیں گے؟" },
+      "options": [
+        { "value": "yes", "en": "Yes", "ur": "جی ہاں" },
+        { "value": "no", "en": "No", "ur": "نہیں" }
+      ] },
+    { "key": "comments", "step": 2, "kind": "text",
+      "title": { "en": "Anything else you'd like to tell us?", "ur": "کچھ اور بتانا چاہیں گے؟" } }
+  ]
+}

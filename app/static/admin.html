@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Sultan Feedback Admin</title>
+<link rel="icon" type="image/webp" href="/static/logo.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Noto+Nastaliq+Urdu:wght@400&family=Rozha+One&display=swap">
+<style>
+/* Layout: a green app bar carrying the brand, one filter row that scopes everything,
+   then Overview (tiles, charts, branch table) or Responses (table + detail drawer). */
+:root {
+  --bg: #F1F4EF;
+  --surface: #FFFFFF;
+  --sunken: #F5F8F4;
+  --ink: #17221D;
+  --muted: #56665D;
+  --faint: #7C8A82;
+  --line: #D8E1D9;
+  --brand: #1C5841;
+  --brand-hover: #174A37;
+  --brand-text: #1C5841;
+  --brand-soft: #E4EEE8;
+  --on-brand: #FFFFFF;
+  --on-brand-soft: rgba(255, 255, 255, .78);
+  --gold: #F2C24F;
+  --bar: #2D7A5A;
+  --track: #E9EFEA;
+  --star: #E0A21B;
+  /* status palette: reserved for state, always shown with a text label */
+  --good: #1E7A45; --good-soft: #E3F3E8;
+  --warn: #8A5A00; --warn-soft: #FDF1D6;
+  --crit: #B3261E; --crit-soft: #FCEBE9;
+  --neutral-soft: #EEF1EE;
+  --shadow: 0 1px 2px rgba(23, 34, 29, .06), 0 6px 20px rgba(23, 34, 29, .06);
+  --font-display: "Rozha One", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-urdu: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Urdu Typesetting", serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1612; --surface: #15211B; --sunken: #111B16; --ink: #E6ECE7; --muted: #9BADA2; --faint: #74867B;
+    --line: #2A3B32; --brand: #1F6249; --brand-hover: #247055; --brand-text: #84CFA8; --brand-soft: #1A3127;
+    --bar: #5DB58C; --track: #1E2D26; --star: #F2B53A;
+    --good: #7FD39C; --good-soft: #17301F; --warn: #F2C46B; --warn-soft: #33270F; --crit: #F28B82; --crit-soft: #3A1F1C;
+    --neutral-soft: #1E2A24;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 20px rgba(0, 0, 0, .3);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1612; --surface: #15211B; --sunken: #111B16; --ink: #E6ECE7; --muted: #9BADA2; --faint: #74867B;
+  --line: #2A3B32; --brand: #1F6249; --brand-hover: #247055; --brand-text: #84CFA8; --brand-soft: #1A3127;
+  --bar: #5DB58C; --track: #1E2D26; --star: #F2B53A;
+  --good: #7FD39C; --good-soft: #17301F; --warn: #F2C46B; --warn-soft: #33270F; --crit: #F28B82; --crit-soft: #3A1F1C;
+  --neutral-soft: #1E2A24;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 20px rgba(0, 0, 0, .3);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 .9375rem/1.5 var(--font-body); }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--brand-text); }
+:focus-visible { outline: 2px solid var(--brand-text); outline-offset: 2px; }
+.wrap { max-width: 76rem; margin-inline: auto; padding-inline: 16px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* App bar */
+.appbar { background: var(--brand); color: var(--on-brand); padding-top: env(safe-area-inset-top, 0px); }
+.appbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.25rem; min-height: 4rem; padding-block: .5rem; }
+.mark { display: flex; align-items: center; gap: .65rem; text-decoration: none; color: inherit; }
+.mark img { width: 2.6rem; height: 2.6rem; border-radius: 50%; background: #FFFFFF; padding: .15rem; box-shadow: 0 0 0 2px var(--gold); }
+.mark b { font: 400 1.35rem/1 var(--font-display); color: var(--gold); }
+.mark small { display: block; font-size: .7rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--on-brand-soft); }
+.tabs { display: flex; gap: .25rem; }
+.tabs button {
+  border: 0; background: none; color: var(--on-brand-soft); font-weight: 600; cursor: pointer;
+  padding: .5rem .85rem; border-radius: 999px;
+}
+.tabs button[aria-selected="true"] { background: rgba(255, 255, 255, .14); color: var(--on-brand); }
+.tabs button:hover { color: var(--on-brand); }
+.tabs .count { margin-inline-start: .35rem; padding: 0 .45rem; border-radius: 999px; background: var(--gold); color: #3A2A00; font-size: .75rem; }
+.user { margin-inline-start: auto; display: flex; align-items: center; gap: .25rem; font-size: .875rem; }
+.user span { color: var(--on-brand-soft); margin-inline-end: .35rem; }
+.linkbtn { border: 0; background: none; color: var(--on-brand); cursor: pointer; padding: .4rem .6rem; border-radius: .5rem; font-weight: 600; }
+.linkbtn:hover { background: rgba(255, 255, 255, .12); }
+
+.banner { background: var(--warn-soft); color: var(--warn); border-bottom: 1px solid var(--line); }
+.banner .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding-block: .6rem; font-weight: 600; }
+
+/* Filter row */
+.filters { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); }
+.filters .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .75rem; padding-block: .75rem; }
+.seg { display: inline-flex; flex-wrap: wrap; padding: 3px; border: 1px solid var(--line); border-radius: .7rem; background: var(--surface); }
+.seg button { border: 0; background: none; padding: .35rem .7rem; border-radius: .5rem; cursor: pointer; font-weight: 600; font-size: .85rem; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.field-inline { display: inline-flex; align-items: center; gap: .4rem; font-size: .85rem; color: var(--muted); }
+select, input[type="date"], input[type="search"], input[type="text"], input[type="password"], textarea {
+  border: 1px solid var(--line); border-radius: .6rem; background: var(--surface); color: var(--ink);
+  padding: .45rem .65rem; min-height: 2.35rem;
+}
+select { padding-inline-end: 1.8rem; }
+.custom-range { display: inline-flex; align-items: center; gap: .35rem; }
+
+main { padding-block: 1.25rem 3rem; transition: opacity .2s; }
+main.loading { opacity: .55; }
+h2.section { margin: 0 0 .75rem; font: 400 1.5rem/1.2 var(--font-display); }
+
+/* Stat tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr)); gap: .75rem; margin-bottom: .75rem; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1rem 1.1rem; }
+.tile .label { margin: 0; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.tile .value { margin: .2rem 0 0; font-size: 2.1rem; font-weight: 700; line-height: 1.15; }
+.tile .value small { font-size: 1rem; font-weight: 600; color: var(--muted); }
+.tile .sub { margin: .15rem 0 0; font-size: .85rem; color: var(--faint); }
+.tile.alert { border-color: var(--crit); }
+.tile.alert .value { color: var(--crit); }
+.tile button.go { margin-top: .4rem; border: 0; background: none; padding: 0; color: var(--brand-text); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Cards and charts */
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin-bottom: .75rem; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: .9rem; padding: 1.1rem 1.2rem 1.2rem; min-width: 0; margin-bottom: .75rem; }
+.grid2 .card { margin-bottom: 0; }
+.card h3 { margin: 0; font-size: 1rem; font-weight: 700; }
+.card .hint { margin: .15rem 0 .9rem; font-size: .85rem; color: var(--muted); }
+.card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: .5rem 1rem; }
+.card-head > div { flex: 1 1 10rem; min-width: 0; }
+.card-head select { flex: 1 1 12rem; min-width: 0; max-width: 100%; }
+select { max-width: 100%; }
+.bars { display: grid; gap: .45rem; }
+.bar-row { display: grid; grid-template-columns: minmax(6rem, 11rem) minmax(0, 1fr); align-items: center; gap: .75rem; padding: .2rem .25rem; border-radius: .4rem; cursor: default; }
+.bar-row:hover, .bar-row:focus-visible { background: var(--sunken); }
+.bar-label { font-size: .875rem; color: var(--ink); overflow-wrap: anywhere; }
+.bar-track { display: flex; align-items: center; gap: .5rem; min-width: 0; }
+.bar-fill { flex: none; height: 14px; width: calc((100% - 6.5rem) * var(--p)); border-radius: 0 4px 4px 0; background: var(--bar); }
+.bar-row:hover .bar-fill, .bar-row:focus-visible .bar-fill { filter: brightness(1.12); }
+.bar-value { flex: none; font-size: .8125rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bar-value b { color: var(--ink); font-weight: 700; }
+.empty { margin: .5rem 0 0; color: var(--faint); font-size: .9rem; }
+
+.tip {
+  position: fixed; z-index: 60; pointer-events: none; max-width: 16rem;
+  background: var(--ink); color: var(--bg); padding: .45rem .65rem; border-radius: .5rem;
+  font-size: .8125rem; box-shadow: var(--shadow);
+}
+.tip b { display: block; font-size: .95rem; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: .9rem; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+th, td { padding: .6rem .8rem; text-align: start; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--sunken); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+td.n, th.n { text-align: end; font-variant-numeric: tabular-nums; }
+.card .table-wrap { border: 0; border-radius: 0; margin-inline: -1.2rem; }
+.card table th:first-child, .card table td:first-child { padding-inline-start: 1.2rem; }
+.card table th:last-child, .card table td:last-child { padding-inline-end: 1.2rem; }
+.meter { display: inline-block; width: 4rem; height: 6px; border-radius: 99px; background: var(--track); vertical-align: middle; margin-inline-end: .5rem; overflow: hidden; }
+.meter i { display: block; height: 100%; background: var(--bar); border-radius: 0 3px 3px 0; }
+.cell-link { border: 0; background: none; padding: 0; color: var(--brand-text); font-weight: 600; cursor: pointer; text-align: start; }
+.cell-link:hover { text-decoration: underline; }
+.rows tbody tr { cursor: pointer; }
+.rows td { white-space: nowrap; }
+.rows tbody tr:hover, .rows tbody tr:focus-visible { background: var(--sunken); }
+.snippet { max-width: 18rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stars { color: var(--star); letter-spacing: .05em; white-space: nowrap; }
+.stars .off { color: var(--line); }
+
+.chip { display: inline-flex; align-items: center; gap: .3rem; padding: .1rem .55rem; border-radius: 999px; font-size: .78rem; font-weight: 700; white-space: nowrap; }
+.chip::before { content: ""; width: .45rem; height: .45rem; border-radius: 50%; background: currentColor; }
+.chip.new { background: var(--warn-soft); color: var(--warn); }
+.chip.reviewed { background: var(--neutral-soft); color: var(--muted); }
+.chip.actioned { background: var(--good-soft); color: var(--good); }
+.chip.archived { background: var(--neutral-soft); color: var(--faint); }
+.chip.crit { background: var(--crit-soft); color: var(--crit); }
+.chip.plain { background: var(--neutral-soft); color: var(--muted); }
+.chip.plain::before { display: none; }
+
+/* Responses toolbar */
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem .75rem; margin-bottom: .75rem; }
+.toolbar input[type="search"] { flex: 1 1 14rem; min-width: 0; }
+.check { display: inline-flex; align-items: center; gap: .4rem; padding: .35rem .7rem; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); cursor: pointer; font-size: .85rem; font-weight: 600; }
+.check input { accent-color: var(--brand); margin: 0; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .4rem; min-height: 2.35rem; padding: 0 1rem;
+  border: 1px solid var(--brand); border-radius: .6rem; background: var(--brand); color: var(--on-brand);
+  font-weight: 700; text-decoration: none; cursor: pointer;
+}
+.btn:hover { background: var(--brand-hover); }
+.btn.secondary { background: var(--surface); color: var(--brand-text); border-color: var(--line); }
+.btn.secondary:hover { border-color: var(--brand-text); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .75rem; color: var(--muted); font-size: .875rem; }
+.pager div { display: flex; gap: .4rem; }
+
+/* Drawer */
+.scrim { position: fixed; inset: 0; z-index: 40; background: rgba(10, 18, 14, .45); }
+.drawer {
+  position: fixed; z-index: 50; top: 0; bottom: 0; inset-inline-end: 0; width: min(36rem, 100%);
+  display: flex; flex-direction: column; background: var(--surface); box-shadow: var(--shadow);
+  padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.drawer-head { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem 1.25rem; border-bottom: 1px solid var(--line); }
+.drawer-head h2 { margin: 0; font-size: 1.15rem; letter-spacing: .02em; }
+.drawer-head p { margin: .1rem 0 0; color: var(--muted); font-size: .875rem; }
+.drawer-head .close { margin-inline-start: auto; border: 1px solid var(--line); background: var(--surface); border-radius: .6rem; width: 2.25rem; height: 2.25rem; cursor: pointer; font-size: 1.2rem; line-height: 1; }
+.drawer-body { flex: 1; overflow-y: auto; padding: 1rem 1.25rem 2rem; display: grid; gap: 1.1rem; align-content: start; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
+.issues { margin: 0; padding: .75rem .9rem .75rem 2rem; border-radius: .7rem; background: var(--crit-soft); color: var(--crit); font-weight: 600; font-size: .9rem; }
+.issues-title { margin: 0 0 .35rem; font-size: .8rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--crit); }
+.block-title { margin: 0 0 .4rem; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.status-seg { display: flex; flex-wrap: wrap; gap: .35rem; }
+.status-seg button { flex: 1 1 auto; border: 1px solid var(--line); background: var(--surface); padding: .4rem .7rem; border-radius: .6rem; font-weight: 600; cursor: pointer; font-size: .85rem; }
+.status-seg button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+textarea { width: 100%; min-height: 5rem; resize: vertical; }
+.note-row { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
+.saved { color: var(--good); font-weight: 600; font-size: .85rem; }
+dl.kv { margin: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); border: 1px solid var(--line); border-radius: .7rem; overflow: hidden; }
+dl.kv dt, dl.kv dd { margin: 0; padding: .5rem .75rem; border-bottom: 1px solid var(--line); font-size: .875rem; }
+dl.kv dt { color: var(--muted); background: var(--sunken); }
+dl.kv dd { font-weight: 600; overflow-wrap: anywhere; }
+dl.kv dt:nth-last-child(2), dl.kv dd:last-child { border-bottom: 0; }
+.quote { margin: 0; padding: .75rem .9rem; border-inline-start: 3px solid var(--gold); background: var(--sunken); border-radius: .5rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.contact-links { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .5rem; }
+
+/* Modal */
+.modal { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 16px; background: rgba(10, 18, 14, .5); }
+.modal-card { width: min(26rem, 100%); background: var(--surface); border-radius: 1rem; padding: 1.25rem; box-shadow: var(--shadow); }
+.modal-card h2 { margin: 0 0 .75rem; font: 400 1.4rem/1.2 var(--font-display); }
+.stack { display: grid; gap: .75rem; }
+.stack label { display: grid; gap: .3rem; font-size: .85rem; font-weight: 600; color: var(--muted); }
+.form-error { margin: 0; color: var(--crit); font-weight: 600; font-size: .875rem; }
+.row-end { display: flex; justify-content: flex-end; gap: .5rem; margin-top: .25rem; }
+
+/* Sign-in */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 24px 16px; }
+.login-card { width: min(24rem, 100%); background: var(--surface); border-radius: 1.25rem; box-shadow: var(--shadow); overflow: hidden; }
+.login-arch {
+  text-align: center; color: var(--on-brand); background: var(--brand);
+  border-radius: 50% 50% 0 0 / 5rem 5rem 0 0; margin: 1rem 1rem 0; padding: 1.75rem 1rem 1.25rem;
+}
+.login-arch img { width: 5rem; height: 5rem; border-radius: 50%; background: #FFFFFF; padding: .25rem; box-shadow: 0 0 0 3px var(--brand), 0 0 0 4.5px var(--gold); }
+.login-arch h1 { margin: .6rem 0 0; font: 400 1.6rem/1.1 var(--font-display); color: var(--gold); }
+.login-arch p { margin: .25rem 0 0; font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--on-brand-soft); }
+.login form { padding: 1.25rem; }
+.login .btn { width: 100%; min-height: 2.75rem; }
+
+.toast { position: fixed; z-index: 80; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: .6rem 1rem; border-radius: .6rem; font-weight: 600; box-shadow: var(--shadow); }
+
+@media (max-width: 900px) {
+  .grid2 { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .filters { position: static; }
+  .tile { padding: .85rem .9rem; }
+  .tile .value { font-size: 1.6rem; }
+  .bar-row { grid-template-columns: minmax(5rem, 7.5rem) minmax(0, 1fr); gap: .5rem; }
+  .user span { display: none; }
+  dl.kv { grid-template-columns: minmax(0, 1fr); }
+  dl.kv dt { border-bottom: 0; padding-bottom: 0; background: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="login" id="login-view" hidden>
+  <div class="login-card">
+    <div class="login-arch">
+      <img src="/static/logo.webp" width="150" height="150" alt="">
+      <h1>Sultan Yakhni Pulao</h1>
+      <p>Feedback admin</p>
+    </div>
+    <form id="login-form" class="stack" novalidate>
+      <label>Username <input id="login-user" type="text" autocomplete="username" required maxlength="50"></label>
+      <label>Password <input id="login-pass" type="password" autocomplete="current-password" required maxlength="200"></label>
+      <p class="form-error" id="login-error" role="alert" hidden></p>
+      <button class="btn" type="submit" id="login-btn">Sign in</button>
+    </form>
+  </div>
+</div>
+
+<div id="app-view" hidden>
+  <header class="appbar">
+    <div class="wrap">
+      <a class="mark" href="/admin"><img src="/static/logo.webp" width="150" height="150" alt=""><span><b>Sultan Feedback</b><small>Admin portal</small></span></a>
+      <nav class="tabs" role="tablist" aria-label="Sections">
+        <button type="button" role="tab" id="tab-overview" aria-selected="true" data-view="overview">Overview</button>
+        <button type="button" role="tab" id="tab-responses" aria-selected="false" data-view="responses">Responses<span class="count" id="open-count" hidden></span></button>
+      </nav>
+      <div class="user">
+        <span id="who"></span>
+        <button type="button" class="linkbtn" id="open-password">Change password</button>
+        <button type="button" class="linkbtn" id="logout">Sign out</button>
+      </div>
+    </div>
+  </header>
+  <div class="banner" id="pw-banner" hidden>
+    <div class="wrap">You are still using the default password. Anyone who guesses it can read customers' phone numbers. <button type="button" class="btn secondary" id="banner-password">Change it now</button></div>
+  </div>
+
+  <section class="filters" aria-label="Filters">
+    <div class="wrap">
+      <div class="seg" role="group" aria-label="Date range" id="range">
+        <button type="button" data-range="today">Today</button>
+        <button type="button" data-range="7">7 days</button>
+        <button type="button" data-range="30">30 days</button>
+        <button type="button" data-range="90">90 days</button>
+        <button type="button" data-range="all">All time</button>
+        <button type="button" data-range="custom">Custom</button>
+      </div>
+      <span class="custom-range" id="custom-range" hidden>
+        <input type="date" id="date-from" aria-label="From date">
+        <span aria-hidden="true">–</span>
+        <input type="date" id="date-to" aria-label="To date">
+      </span>
+      <label class="field-inline">Branch <select id="f-branch"><option value="">All branches</option></select></label>
+      <label class="field-inline">Order type <select id="f-service"><option value="">All types</option></select></label>
+    </div>
+  </section>
+
+  <main class="wrap" id="main">
+    <section id="view-overview" aria-labelledby="tab-overview">
+      <div class="tiles">
+        <div class="tile"><p class="label">Responses</p><p class="value num" id="t-total">–</p><p class="sub" id="t-total-sub"></p></div>
+        <div class="tile"><p class="label">Food rating</p><p class="value" id="t-food">–</p><p class="sub" id="t-food-sub"></p></div>
+        <div class="tile"><p class="label">Would come back</p><p class="value" id="t-return">–</p><p class="sub" id="t-return-sub"></p></div>
+        <div class="tile" id="t-attn-tile"><p class="label">Needs attention</p><p class="value num" id="t-attn">–</p><p class="sub" id="t-attn-sub"></p><button type="button" class="go" id="t-attn-go">Review them</button></div>
+      </div>
+
+      <div class="grid2">
+        <article class="card">
+          <h3>Food rating</h3>
+          <p class="hint">How customers rated the food, out of 5 stars</p>
+          <div class="bars" id="c-food"></div>
+        </article>
+        <article class="card">
+          <h3>Order types</h3>
+          <p class="hint">How customers got their order</p>
+          <div class="bars" id="c-service"></div>
+        </article>
+      </div>
+
+      <article class="card">
+        <h3>Branches</h3>
+        <p class="hint">Select a branch to see only its feedback</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Branch</th><th class="n">Responses</th><th>Food rating</th><th class="n">Would come back</th><th class="n">Needs attention</th></tr></thead>
+            <tbody id="c-branches"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <div class="grid2">
+        <article class="card">
+          <h3>Star ratings</h3>
+          <p class="hint">Average for every star question, out of 5</p>
+          <div class="bars" id="c-stars"></div>
+        </article>
+        <article class="card">
+          <div class="card-head">
+            <div><h3>Answers to one question</h3><p class="hint" id="c-q-hint">Pick any question</p></div>
+            <select id="q-pick" aria-label="Question"></select>
+          </div>
+          <div class="bars" id="c-question"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="view-responses" aria-labelledby="tab-responses" hidden>
+      <div class="toolbar">
+        <input type="search" id="r-q" placeholder="Search reference, name, phone or comments" aria-label="Search responses">
+        <select id="r-status" aria-label="Status">
+          <option value="">Any status</option>
+          <option value="new">New</option>
+          <option value="reviewed">Reviewed</option>
+          <option value="actioned">Actioned</option>
+          <option value="archived">Archived</option>
+        </select>
+        <label class="check"><input type="checkbox" id="r-attn"> Needs attention</label>
+        <label class="check"><input type="checkbox" id="r-offers"> Offer sign-ups</label>
+        <select id="r-sort" aria-label="Sort">
+          <option value="newest">Newest first</option>
+          <option value="oldest">Oldest first</option>
+          <option value="food_low">Lowest food rating</option>
+          <option value="food_high">Highest food rating</option>
+        </select>
+        <a class="btn secondary" id="export" href="/api/admin/export.xlsx" download>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Export to Excel
+        </a>
+      </div>
+      <div class="table-wrap">
+        <table class="rows">
+          <thead><tr><th>Received</th><th>Branch</th><th>Order type</th><th>Food</th><th>Come back</th><th>Issues</th><th>Status</th><th>Customer</th><th>Comment</th></tr></thead>
+          <tbody id="r-body"></tbody>
+        </table>
+      </div>
+      <p class="empty" id="r-empty" hidden>No responses match these filters.</p>
+      <div class="pager">
+        <span id="r-range"></span>
+        <div><button type="button" class="btn secondary" id="r-prev">Previous</button><button type="button" class="btn secondary" id="r-next">Next</button></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="d-ref" hidden>
+  <div class="drawer-head">
+    <div><h2 id="d-ref"></h2><p id="d-when"></p></div>
+    <button type="button" class="close" id="d-close" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body" id="d-body"></div>
+</aside>
+
+<div class="modal" id="pw-modal" role="dialog" aria-modal="true" aria-labelledby="pw-title" hidden>
+  <form class="modal-card stack" id="pw-form" novalidate>
+    <h2 id="pw-title">Change password</h2>
+    <label>Current password <input type="password" id="pw-current" autocomplete="current-password" required></label>
+    <label>New password <input type="password" id="pw-new" autocomplete="new-password" required minlength="8" maxlength="72"></label>
+    <label>Repeat new password <input type="password" id="pw-repeat" autocomplete="new-password" required></label>
+    <p class="form-error" id="pw-error" role="alert" hidden></p>
+    <div class="row-end">
+      <button type="button" class="btn secondary" id="pw-cancel">Cancel</button>
+      <button type="submit" class="btn" id="pw-save">Save password</button>
+    </div>
+  </form>
+</div>
+
+<div class="tip" id="tip" role="status" hidden></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="/static/admin.js" defer></script>
+</body>
+</html>

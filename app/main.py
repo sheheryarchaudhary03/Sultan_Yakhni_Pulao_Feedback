@@ -1,0 +1,304 @@
+"""Sultan Yakhni Pulao feedback server: public form, admin portal and JSON API."""
+import json
+import logging
+import os
+import threading
+from contextlib import asynccontextmanager
+from datetime import datetime
+from pathlib import Path
+from urllib.parse import urlparse
+from uuid import UUID
+from zoneinfo import ZoneInfo
+
+import psycopg
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import ValidationError
+from starlette.concurrency import run_in_threadpool
+
+from . import auth, catalogue, ratelimit, repository
+from .config import settings
+from .db import pool, run_migrations
+from .export import build_workbook
+from .schemas import STATUSES, FeedbackIn, Filters, LoginIn, PasswordChangeIn, ResponseUpdate
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+log = logging.getLogger("syp")
+
+STATIC = Path(__file__).resolve().parent / "static"
+
+# The form page carries the question catalogue inline, so it renders without a second request.
+_CATALOGUE_JSON = json.dumps(catalogue.DATA, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+FORM_HTML = (STATIC / "form.html").read_text(encoding="utf-8").replace("{{CATALOGUE}}", _CATALOGUE_JSON)
+
+
+# Start-up (migrations, pool, first admin) runs once per instance. If it fails,
+# e.g. the database is unreachable, pages answer 503 with the reason and the
+# next request tries again instead of the whole function crashing.
+_ready = False
+_ready_lock = threading.Lock()
+
+
+def ensure_ready() -> str | None:
+    """Initialise if needed. Returns None when ready, else a message for the visitor."""
+    global _ready
+    if _ready:
+        return None
+    with _ready_lock:
+        if _ready:
+            return None
+        try:
+            run_migrations()
+            pool.open(wait=True, timeout=15)
+            auth.ensure_default_admin()
+        except psycopg.OperationalError:
+            log.exception("Cannot connect to the database")
+            return "Cannot connect to the database. Check DATABASE_URL in the hosting settings."
+        except Exception:
+            log.exception("Start-up failed")
+            return "The server could not start. Details are in the server logs."
+        _ready = True
+        return None
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    await run_in_threadpool(ensure_ready)
+    yield
+    if _ready:
+        pool.close()
+
+
+app = FastAPI(title="Sultan Yakhni Pulao Feedback", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
+app.mount("/static", StaticFiles(directory=STATIC), name="static")
+
+CSP = (
+    "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+    "font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; "
+    "frame-ancestors 'none'; base-uri 'none'; form-action 'self'"
+)
+
+
+@app.middleware("http")
+async def security(request: Request, call_next):
+    if not request.url.path.startswith("/static/"):
+        problem = await run_in_threadpool(ensure_ready)
+        if problem:
+            return PlainTextResponse(
+                "Sultan feedback is temporarily unavailable.\n\n" + problem, status_code=503,
+                headers={"Retry-After": "30", "Cache-Control": "no-store"},
+            )
+    # Admin writes must come from this site (defence in depth on top of SameSite=Strict).
+    if request.url.path.startswith("/api/admin") and request.method not in ("GET", "HEAD", "OPTIONS"):
+        origin = request.headers.get("origin")
+        if origin and urlparse(origin).netloc != request.headers.get("host"):
+            return JSONResponse({"detail": "Request blocked."}, status_code=403)
+    response = await call_next(request)
+    response.headers["Content-Security-Policy"] = CSP
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["Referrer-Policy"] = "same-origin"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+    if settings.cookie_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    if request.url.path.startswith("/api/admin") or request.url.path == "/admin":
+        response.headers["Cache-Control"] = "no-store"
+    return response
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error(_: Request, exc: RequestValidationError):
+    first = exc.errors()[0] if exc.errors() else {}
+    msg = str(first.get("msg", "Some fields are not valid.")).removeprefix("Value error, ")
+    field = ".".join(str(p) for p in first.get("loc", [])[1:])
+    return JSONResponse({"detail": msg, "field": field}, status_code=422)
+
+
+ON_VERCEL = bool(os.getenv("VERCEL"))
+
+
+def client_ip(request: Request) -> str | None:
+    # On Vercel the edge network sets these headers and overwrites any value a
+    # visitor sends, so they can be trusted there. Elsewhere uvicorn's
+    # --proxy-headers has already put the real address in request.client.
+    if ON_VERCEL:
+        ip = request.headers.get("x-real-ip") or request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        if ip:
+            return ip
+    return request.client.host if request.client else None
+
+
+# -------------------------------------------------------------------- pages
+@app.get("/", include_in_schema=False)
+def form_page():
+    return HTMLResponse(FORM_HTML)
+
+
+@app.get("/admin", include_in_schema=False)
+def admin_page():
+    return FileResponse(STATIC / "admin.html")
+
+
+@app.get("/healthz", include_in_schema=False)
+def health():
+    with pool.connection() as conn:
+        conn.execute("SELECT 1")
+    return {"ok": True}
+
+
+# --------------------------------------------------------------- public API
+@app.post("/api/feedback", status_code=201)
+def submit_feedback(payload: FeedbackIn, request: Request):
+    ip = client_ip(request) or "unknown"
+    # Generous: a branch's guest Wi-Fi puts many customers behind one address.
+    if not ratelimit.allow(ratelimit.SUBMIT, ip, limit=30, window_seconds=600):
+        raise HTTPException(429, "Too many submissions from this connection. Please try again in a few minutes.")
+    if payload.website:  # honeypot filled: pretend success, store nothing
+        return {"reference": "SYP-000000-RECVD"}
+    try:
+        ref = repository.create_response(payload, ratelimit.key_for(ip), request.headers.get("user-agent"))
+    except catalogue.SubmissionError as e:
+        raise HTTPException(422, str(e))
+    return {"reference": ref}
+
+
+# ---------------------------------------------------------------- admin API
+@app.post("/api/admin/login")
+def login(body: LoginIn, request: Request, response: Response):
+    ip = client_ip(request) or "unknown"
+    wait = ratelimit.retry_after(ratelimit.LOGIN_FAIL, ip, limit=5, window_seconds=15 * 60)
+    if wait:
+        raise HTTPException(429, f"Too many failed sign-ins. Try again in {max(1, wait // 60)} minutes.")
+    admin = auth.authenticate(body.username, body.password)
+    if admin is None:
+        ratelimit.record(ratelimit.LOGIN_FAIL, ip)
+        log.warning("Failed admin sign-in for '%s' from %s", body.username[:50], ip)
+        raise HTTPException(401, "Wrong username or password.")
+    ratelimit.clear(ratelimit.LOGIN_FAIL, ip)
+    token = auth.create_session(admin["id"], client_ip(request), request.headers.get("user-agent"))
+    response.set_cookie(
+        auth.SESSION_COOKIE, token, max_age=settings.session_hours * 3600, httponly=True,
+        secure=settings.cookie_secure, samesite="strict", path="/",
+    )
+    return {"username": admin["username"]}
+
+
+@app.post("/api/admin/logout")
+def logout(request: Request, response: Response):
+    token = request.cookies.get(auth.SESSION_COOKIE)
+    if token:
+        auth.delete_session(token)
+    response.delete_cookie(auth.SESSION_COOKIE, path="/")
+    return {"ok": True}
+
+
+@app.get("/api/admin/me")
+def me(admin=Depends(auth.current_admin)):
+    return {"username": admin["username"], "default_password": auth.uses_default_password(admin)}
+
+
+@app.post("/api/admin/password")
+def change_password(body: PasswordChangeIn, admin=Depends(auth.current_admin)):
+    if not auth.change_password(admin["id"], body.current_password, body.new_password):
+        raise HTTPException(400, "Your current password is not correct.")
+    auth.delete_other_sessions(admin["id"], admin["token"])
+    return {"ok": True}
+
+
+@app.get("/api/admin/meta")
+def meta(admin=Depends(auth.current_admin)):
+    questions = [
+        {"key": q["key"], "title": catalogue.title(q), "kind": q["kind"], "step": q["step"],
+         "services": (q.get("when") or {}).get("service")}
+        for q in catalogue.QUESTIONS if q["kind"] in catalogue.ANSWER_KINDS
+    ]
+    return {
+        "branches": [{"id": k, "name": v} for k, v in catalogue.BRANCHES.items()],
+        "services": [{"value": k, "label": v} for k, v in catalogue.SERVICES.items()],
+        "statuses": list(STATUSES),
+        "questions": questions,
+        "timezone": settings.timezone,
+    }
+
+
+def filters_dep(
+    date_from: str | None = Query(None), date_to: str | None = Query(None), branch: str | None = Query(None),
+    service: str | None = Query(None), q: str | None = Query(None), status: str | None = Query(None),
+    attention: bool = Query(False), offers: bool = Query(False),
+) -> Filters:
+    try:
+        return Filters(date_from=date_from, date_to=date_to, branch=branch, service=service, q=q,
+                       status=status, attention=attention, offers=offers)
+    except ValidationError as e:
+        raise HTTPException(422, f"Filter '{e.errors()[0]['loc'][0]}' is not valid.")
+
+
+@app.get("/api/admin/stats")
+def get_stats(f: Filters = Depends(filters_dep), admin=Depends(auth.current_admin)):
+    return repository.stats(f)
+
+
+@app.get("/api/admin/breakdown/{key}")
+def get_breakdown(key: str, f: Filters = Depends(filters_dep), admin=Depends(auth.current_admin)):
+    result = repository.breakdown(f, key)
+    if result is None:
+        raise HTTPException(404, "There is no such question.")
+    return result
+
+
+@app.get("/api/admin/responses")
+def list_responses(
+    f: Filters = Depends(filters_dep), page: int = Query(1, ge=1, le=100_000),
+    page_size: int = Query(25, ge=5, le=100), sort: str = Query("newest"),
+    admin=Depends(auth.current_admin),
+):
+    return repository.list_responses(f, page, page_size, sort)
+
+
+@app.get("/api/admin/responses/{response_id}")
+def get_response(response_id: UUID, admin=Depends(auth.current_admin)):
+    item = repository.response_detail(str(response_id))
+    if item is None:
+        raise HTTPException(404, "This response no longer exists.")
+    return item
+
+
+@app.patch("/api/admin/responses/{response_id}")
+def update_response(response_id: UUID, body: ResponseUpdate, admin=Depends(auth.current_admin)):
+    ok = repository.update_response(str(response_id), body.status, body.admin_note,
+                                    set_note="admin_note" in body.model_fields_set)
+    if not ok:
+        raise HTTPException(404, "This response no longer exists.")
+    return repository.response_detail(str(response_id))
+
+
+@app.get("/api/admin/export.xlsx")
+def export_xlsx(f: Filters = Depends(filters_dep), admin=Depends(auth.current_admin)):
+    data = build_workbook(repository.export_rows(f), repository.stats(f), _filters_label(f))
+    stamp = datetime.now(ZoneInfo(settings.timezone)).strftime("%Y%m%d-%H%M")
+    return Response(
+        data,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={"Content-Disposition": f'attachment; filename="sultan-feedback-{stamp}.xlsx"'},
+    )
+
+
+def _filters_label(f: Filters) -> str:
+    parts = []
+    if f.date_from or f.date_to:
+        parts.append(f"dates {f.date_from or '…'} to {f.date_to or '…'}")
+    if f.branch:
+        parts.append(f"branch {catalogue.BRANCHES.get(f.branch, f.branch)}")
+    if f.service:
+        parts.append(f"order type {catalogue.SERVICES.get(f.service, f.service)}")
+    if f.q:
+        parts.append(f'search "{f.q}"')
+    if f.status:
+        parts.append(f"status {f.status}")
+    if f.attention:
+        parts.append("needs attention only")
+    if f.offers:
+        parts.append("offer sign-ups only")
+    return ", ".join(parts) or "All responses"
