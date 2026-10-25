@@ -66,11 +66,14 @@ phone numbers.
 
 1. On [vercel.com](https://vercel.com): **Add New → Project**, import
    `Sultan_Yakhni_Pulao_Feedback` from GitHub. Leave the framework as detected (FastAPI).
-2. In the project: **Storage → Create Database → Neon (Postgres)** and connect it to the
+   Under **Environment Variables** add `ADMIN_PASSWORD` (the first admin password) and
+   `APP_TIMEZONE` = `Asia/Karachi`, then **Deploy**. Until a database is connected, every
+   page says the app is not set up yet.
+2. In the project: **Storage → Create Database → Neon (Postgres)**, region **Singapore**
+   (the app runs in Vercel's Singapore region, see `vercel.json`), and connect it to the
    project. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED`.
-3. **Settings → Environment Variables**, add `ADMIN_PASSWORD` (the first admin password)
-   and `APP_TIMEZONE` = `Asia/Karachi`. `SECRET_KEY` is optional (see `.env.example`).
-4. **Deployments → Redeploy**. Tables are created on the first request.
+3. **Deployments → ⋯ → Redeploy**. Tables and the first admin are created on the first
+   request. `SECRET_KEY` is optional (see `.env.example`).
 
 Every push to `main` redeploys automatically.
 
